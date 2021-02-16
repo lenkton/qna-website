@@ -1,0 +1,8 @@
+h1 = question.title 
+
+p = question.body
+ul
+  = render answers
+  = link_to t('.add_answer'), new_question_answer_path(question)
+
+= link_to t('actions.back'), questions_path

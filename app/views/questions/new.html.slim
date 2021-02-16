@@ -1,0 +1,6 @@
+h1 = t('.question_creation')
+
+= form_for question do |form|
+  = render 'form', form: form
+
+= link_to t('actions.back'), questions_path
