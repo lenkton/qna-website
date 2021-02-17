@@ -4,7 +4,7 @@ class AnswersController < ApplicationController
   expose :answers, ->{ question.answers }
 
   def create
-    if question.answers.push(answer)
+    if question.answers << answer
       redirect_to question
     else
       render :new
@@ -14,6 +14,6 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body, :question_id)
+    params.require(:answer).permit(:body)
   end
 end
