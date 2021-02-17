@@ -30,4 +30,18 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  actions:
+    back: Back
+  answers:
+    new:
+      answer_to: "Create an answer to the question: \"%{title}\""
   hello: "Hello world"
+  questions:
+    index:
+      create_question: Create a question
+      questions: Questions
+    new:
+      question_creation: Question creation
+    show:
+      add_answer: Add an answer
+

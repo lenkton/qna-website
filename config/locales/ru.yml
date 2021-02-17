@@ -1,0 +1,14 @@
+ru:
+  actions:
+    back: Вернуться
+  answers:
+    new:
+      answer_to: "Создание ответа к вопросу: \"%{title}\""
+  questions:
+    index:
+      create_question: Создать вопрос
+      questions: Вопросы
+    new:
+      question_creation: Создание вопроса
+    show:
+      add_answer: Добавить ответ
