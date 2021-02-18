@@ -42,6 +42,8 @@ en:
   actions:
     back: Back
   answers:
+    create:
+      success: The answer was created successfully!
     new:
       answer_to: "Create an answer to the question: \"%{title}\""
   shared:
@@ -56,6 +58,9 @@ en:
     index:
       create_question: Ask a question
       questions: Questions
+    inline_answer_form:
+      new_answer: "New answer:"
+      send_answer: Send
     new:
       question_creation: Question creation
     show:

@@ -11,6 +11,8 @@ ru:
   actions:
     back: Вернуться
   answers:
+    create:
+      success: Ответ был успешно создан!
     new:
       answer_to: "Создание ответа к вопросу: \"%{title}\""
   shared:
@@ -24,6 +26,9 @@ ru:
     index:
       create_question: Задать вопрос
       questions: Вопросы
+    inline_answer_form:
+      new_answer: "Новый ответ:"
+      send_answer: Ответить
     new:
       question_creation: Создание вопроса
     show:

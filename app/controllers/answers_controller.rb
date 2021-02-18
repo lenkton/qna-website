@@ -1,11 +1,11 @@
 class AnswersController < ApplicationController
   expose :question
   expose :answer
-  expose :answers, ->{ question.answers }
+  expose :answers, -> { question.answers }
 
   def create
     if question.answers << answer
-      redirect_to question
+      redirect_to question, notice: I18n.t('answers.create.success')
     else
       render :new
     end
