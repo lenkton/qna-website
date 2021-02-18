@@ -33,6 +33,10 @@ en:
   activerecord:
     errors:
       models:
+        answer:
+          attributes:
+            body:
+              blank: "An answer's body cannot be blank!"
         question:
           attributes:
             body:

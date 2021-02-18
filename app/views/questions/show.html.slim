@@ -3,9 +3,8 @@ h1 = question.title
 p = question.body
 ul
   = render answers
-  = link_to t('.add_answer'), new_question_answer_path(question)
 
 = form_with url: question_answers_path(question), scope: :answer do |form|
-  = render 'inline_answer_form', form: form
+  = render 'questions/inline_answer_form', form: form
 
 = link_to t('actions.back'), questions_path

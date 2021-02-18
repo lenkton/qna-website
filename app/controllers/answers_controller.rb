@@ -7,7 +7,7 @@ class AnswersController < ApplicationController
     if question.answers << answer
       redirect_to question, notice: I18n.t('answers.create.success')
     else
-      render :new
+      render 'questions/show'
     end
   end
 

@@ -6,9 +6,10 @@ feature 'User can write an answer on the question page (without redirecting)', %
   I'd like to be able to see the question while writing the answer
 ) do
   let!(:question) { create(:question) }
-  scenario 'User writes an answer' do
-    visit question_path(question)
 
+  background { visit question_path(question) }
+
+  scenario 'User writes an answer' do
     fill_in 'Новый ответ:', with: 'answer body'
     click_on 'Ответить'
 
@@ -16,5 +17,9 @@ feature 'User can write an answer on the question page (without redirecting)', %
     expect(page).to have_content 'answer body'
   end
 
-  scenario 'User writes an answer with errors'
+  scenario 'User writes an answer with errors' do
+    click_on 'Ответить'
+
+    expect(page).to have_content 'Текст ответа не может быть пустым'
+  end
 end

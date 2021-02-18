@@ -2,6 +2,10 @@ ru:
   activerecord:
     errors:
       models:
+        answer:
+          attributes:
+            body:
+              blank: Текст ответа не может быть пустым!
         question:
           attributes:
             body:
