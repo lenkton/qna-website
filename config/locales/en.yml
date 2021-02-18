@@ -30,15 +30,31 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  activerecord:
+    errors:
+      models:
+        question:
+          attributes:
+            body:
+              blank: "A question's title cannot be blank!"
+            title:
+              blank: "A question's body cannot be blank!"
   actions:
     back: Back
   answers:
     new:
       answer_to: "Create an answer to the question: \"%{title}\""
+  shared:
+    errors:
+      header: "Errors detected:"
   hello: "Hello world"
   questions:
+    create:
+      success: The question has been successfully created!
+    form:
+      create_question: Ask the question
     index:
-      create_question: Create a question
+      create_question: Ask a question
       questions: Questions
     new:
       question_creation: Question creation

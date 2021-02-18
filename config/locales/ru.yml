@@ -1,12 +1,28 @@
 ru:
+  activerecord:
+    errors:
+      models:
+        question:
+          attributes:
+            body:
+              blank: Текст вопроса не может быть пустым!
+            title:
+              blank: Заголовок вопроса не может быть пустым!
   actions:
     back: Вернуться
   answers:
     new:
       answer_to: "Создание ответа к вопросу: \"%{title}\""
+  shared:
+    errors:
+      header: "Обнаружены ошибки:"
   questions:
+    create:
+      success: Вопрос был успешно создан!
+    form:
+      create_question: Задать вопрос
     index:
-      create_question: Создать вопрос
+      create_question: Задать вопрос
       questions: Вопросы
     new:
       question_creation: Создание вопроса

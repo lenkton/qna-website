@@ -1,0 +1,7 @@
+- if resource&.errors.present?
+  #errors
+    h2
+      = t('.header')
+    ul 
+      - resource.errors.messages.each do |message|
+        li = message

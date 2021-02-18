@@ -1,3 +1,5 @@
+= render 'shared/errors', resource: question
+
 .field
   = form.label :title
   = form.text_field :title
@@ -7,4 +9,4 @@
   = form.text_area :body
 
 .field
-  = form.submit
+  = form.submit t('.create_question')
