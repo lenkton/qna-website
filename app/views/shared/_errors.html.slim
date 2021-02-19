@@ -3,5 +3,5 @@
     h2
       = t('.header')
     ul 
-      - resource.errors.messages.each do |message|
+      - resource.errors.full_messages.each do |message|
         li = message
