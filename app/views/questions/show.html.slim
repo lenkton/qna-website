@@ -4,7 +4,7 @@ p = question.body
 ul
   = render answers
 
-= form_with url: question_answers_path(question), scope: :answer do |form|
+= form_with url: question_answers_path(question), scope: :answer, local: true do |form|
   = render 'questions/inline_answer_form', form: form
 
 = link_to t('actions.back'), questions_path
