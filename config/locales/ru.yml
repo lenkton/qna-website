@@ -22,6 +22,9 @@ ru:
   shared:
     errors:
       header: "Обнаружены ошибки:"
+    header:
+      sign_in: Войти
+      sign_out: Выйти
   questions:
     create:
       success: Вопрос был успешно создан!
