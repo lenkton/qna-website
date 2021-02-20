@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, only: [:create]
   expose :question
   expose :answer
   expose :answers, -> { question.answers }
