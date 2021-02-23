@@ -14,6 +14,9 @@ ru:
               blank: Заголовок вопроса не может быть пустым!
   actions:
     back: Вернуться
+    destroy_confirmation: Вы уверены?
+  alert:
+    requires_authorization: У вас нет достаточных прав для совершения этого действия.
   answers:
     create:
       success: Ответ был успешно создан!
@@ -28,6 +31,8 @@ ru:
   questions:
     create:
       success: Вопрос был успешно создан!
+    destroy:
+      success: Вопрос был успешно удалён!
     form:
       create_question: Задать вопрос
     index:
@@ -40,3 +45,4 @@ ru:
       question_creation: Создание вопроса
     show:
       add_answer: Добавить ответ
+      delete_question: Удалить вопрос

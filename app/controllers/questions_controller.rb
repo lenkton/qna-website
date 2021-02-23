@@ -6,10 +6,19 @@ class QuestionsController < ApplicationController
   expose :answer, -> { question.answers.new }
 
   def create
-    if question.save
+    if current_user.questions << question
       redirect_to question, notice: I18n.t('questions.create.success')
     else
       render :new
+    end
+  end
+
+  def destroy
+    if current_user == question.user
+      question.destroy
+      redirect_to questions_path, notice: I18n.t('questions.destroy.success')
+    else
+      redirect_to question, alert: I18n.t('alert.requires_authorization')
     end
   end
 
