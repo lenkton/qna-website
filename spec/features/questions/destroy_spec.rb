@@ -1,15 +1,15 @@
 require 'rails_helper'
 
-feature 'An authorized user can delete his own questions', %q(
+feature 'An authorized user can delete his/her own questions', %q(
   In order to shift other users' attention from the question
   As an authorized user
   I'd like to be able delete my question
 ) do
   given(:user) { create(:user) }
   given(:unauthorized_user) { create(:user) }
-  given!(:question) { user.questions.create!(attributes_for(:question)) }
+  given!(:question) { create(:question, user: user) }
 
-  scenario 'An authorized user deletes his question' do
+  scenario 'An authorized user deletes his/her question' do
     log_in(user)
 
     visit question_path(question)

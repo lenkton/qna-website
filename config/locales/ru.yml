@@ -18,8 +18,13 @@ ru:
   alert:
     requires_authorization: У вас нет достаточных прав для совершения этого действия.
   answers:
+    answer:
+      confirm: Вы уверены?
+      destroy: Удалить
     create:
       success: Ответ был успешно создан!
+    destroy:
+      success: Ответ был успешно удалён!
     new:
       answer_to: "Создание ответа к вопросу: \"%{title}\""
   shared:
