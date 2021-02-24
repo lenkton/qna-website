@@ -5,14 +5,13 @@ feature 'An authorized user can delete his/her own answer', %q(
   As an authorized user
   I'd like to be able delete my answer
 ) do
-  given(:question_creator) { create(:user) }
-  given(:user) { create(:user) }
-  given(:unauthorized_user) { create(:user) }
+  given(:author) { create(:author) }
+  given(:random_user) { create(:user) }
   given!(:question) { create(:question) }
-  given!(:answer) { create(:answer, user: user, question: question) }
+  given!(:answer) { create(:answer, author: author, question: question) }
 
-  scenario 'An authorized user deletes his/her answer' do
-    log_in(user)
+  scenario 'An author deletes his/her answer' do
+    log_in(author)
 
     visit question_path(question)
 
@@ -21,9 +20,17 @@ feature 'An authorized user can delete his/her own answer', %q(
     expect(page).to have_content('Ответ был успешно удалён!')
   end
 
-  scenario 'An unauthorized user tries to delete an answer' do
-    log_in(unauthorized_user)
+  scenario 'A random user tries to delete an answer' do
+    log_in(random_user)
 
+    visit question_path(question)
+
+    within("li[data-answer-id=\"#{answer.id}\"]") { click_on('Удалить') }
+
+    expect(page).to have_content('У вас нет достаточных прав для совершения этого действия.')
+  end
+
+  scenario 'An unauthenticated user tries to delete an answer' do
     visit question_path(question)
 
     within("li[data-answer-id=\"#{answer.id}\"]") { click_on('Удалить') }

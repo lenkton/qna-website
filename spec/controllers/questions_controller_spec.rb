@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:user) { create(:user) }
+  let(:author) { create(:author) }
+  let(:random_user) { create(:user) }
 
   describe 'POST #create' do
-
-    before { log_in(user) }
+    before { log_in(author) }
 
     context 'valid parameters' do
       it 'creates a question in the database' do
@@ -33,10 +33,10 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:question) { user.questions.create(attributes_for(:question)) }
+    let!(:question) { author.questions.create(attributes_for(:question)) }
 
-    context 'Authorized user' do
-      before { log_in(user) }
+    context 'Author' do
+      before { log_in(author) }
 
       it 'destroys the question' do
         expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
@@ -49,11 +49,21 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'Unauthorized user' do
-      let(:unauthorized_user) { create(:user) }
+    context 'Random user' do
+      before { log_in(random_user) }
 
-      before { log_in(unauthorized_user) }
+      it 'does not destroy the question' do
+        expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
+      end
 
+      it 'redirects to the question page' do
+        delete :destroy, params: { id: question }
+
+        expect(response).to redirect_to question
+      end
+    end
+
+    context 'Unauthenticated user' do
       it 'does not destroy the question' do
         expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
       end

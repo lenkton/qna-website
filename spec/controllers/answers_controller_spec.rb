@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     let!(:question) { create(:question) }
-    let(:user) { create(:user) }
+    let(:author) { create(:author) }
 
-    before { log_in(user) }
+    before { log_in(author) }
 
     context 'valid parameters' do
       it 'creates an answer for the question in the database' do
@@ -33,13 +33,13 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:user) { create(:user) }
-    let(:unauthorized_user) { create(:user) }
+    let(:author) { create(:author) }
+    let(:random_user) { create(:user) }
     let!(:question) { create(:question) }
-    let!(:answer) { create(:answer, user: user, question: question) }
+    let!(:answer) { create(:answer, author: author, question: question) }
 
-    context 'Authorized user' do
-      before { log_in(user) }
+    context 'Author' do
+      before { log_in(author) }
 
       it 'deletes his/her answer' do
         expect { delete :destroy, params: { id: answer } }.to change(question.answers, :count).by(-1)
@@ -52,7 +52,21 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'Unauthorized user' do
+    context 'Random user' do
+      before { log_in(random_user) }
+
+      it 'does not delete the answer in the database' do
+        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+      end
+
+      it 'renders the question show view' do
+        delete :destroy, params: { id: answer }
+
+        expect(response).to render_template('questions/show')
+      end
+    end
+
+    context 'Unauthenticated user' do
       it 'does not delete the answer in the database' do
         expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
       end

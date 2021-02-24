@@ -5,12 +5,12 @@ feature 'An authorized user can delete his/her own questions', %q(
   As an authorized user
   I'd like to be able delete my question
 ) do
-  given(:user) { create(:user) }
-  given(:unauthorized_user) { create(:user) }
-  given!(:question) { create(:question, user: user) }
+  given(:author) { create(:author) }
+  given(:random_user) { create(:user) }
+  given!(:question) { create(:question, author: author) }
 
-  scenario 'An authorized user deletes his/her question' do
-    log_in(user)
+  scenario 'An author user deletes his/her question' do
+    log_in(author)
 
     visit question_path(question)
     click_on('Удалить вопрос')
@@ -18,9 +18,17 @@ feature 'An authorized user can delete his/her own questions', %q(
     expect(page).to have_content('Вопрос был успешно удалён!')
   end
 
-  scenario 'An unauthorized user tries to delete a question' do
-    log_in(unauthorized_user)
+  scenario 'A random user tries to delete a question' do
+    log_in(random_user)
 
+    visit question_path(question)
+
+    click_on('Удалить вопрос')
+
+    expect(page).to have_content('У вас нет достаточных прав для совершения этого действия.')
+  end
+
+  scenario 'An unauthenticated user tries to delete a question' do
     visit question_path(question)
 
     click_on('Удалить вопрос')

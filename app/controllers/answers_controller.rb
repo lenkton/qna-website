@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create]
   expose :question, id: -> { params[:question_id] || Answer.find(params[:id]).question_id }
-  expose :answer, build_params: -> { { user: current_user, question: question }.merge(answer_params) }
+  expose :answer, build_params: -> { { author: current_user, question: question }.merge(answer_params) }
   expose :answers, -> { question.answers }
 
   def create
@@ -13,7 +13,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if answer.user == current_user
+    if current_user&.author_of?(answer)
       answer.destroy
       redirect_to answer.question, notice: I18n.t('answers.destroy.success')
     else
