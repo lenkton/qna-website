@@ -23,16 +23,12 @@ feature 'An authorized user can delete his/her own questions', %q(
 
     visit question_path(question)
 
-    click_on('Удалить вопрос')
-
-    expect(page).to have_content('У вас нет достаточных прав для совершения этого действия.')
+    expect(page).not_to have_content('Удалить вопрос')
   end
 
   scenario 'An unauthenticated user tries to delete a question' do
     visit question_path(question)
 
-    click_on('Удалить вопрос')
-
-    expect(page).to have_content('У вас нет достаточных прав для совершения этого действия.')
+    expect(page).not_to have_content('Удалить вопрос')
   end
 end

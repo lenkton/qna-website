@@ -1,5 +1,6 @@
-h1 = question.title 
-= link_to t('.delete_question'), question_path(question), method: :delete, data: { confirm: t('actions.destroy_confirmation') }
+h1 = question.title
+- if current_user&.author_of?(question)
+  = link_to t('.delete_question'), question_path(question), method: :delete, data: { confirm: t('actions.destroy_confirmation') }
 
 p = question.body
 ul

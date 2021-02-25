@@ -25,16 +25,12 @@ feature 'An authorized user can delete his/her own answer', %q(
 
     visit question_path(question)
 
-    within("li[data-answer-id=\"#{answer.id}\"]") { click_on('Удалить') }
-
-    expect(page).to have_content('У вас нет достаточных прав для совершения этого действия.')
+    within("li[data-answer-id=\"#{answer.id}\"]") { expect(page).not_to have_content('Удалить') }
   end
 
   scenario 'An unauthenticated user tries to delete an answer' do
     visit question_path(question)
 
-    within("li[data-answer-id=\"#{answer.id}\"]") { click_on('Удалить') }
-
-    expect(page).to have_content('У вас нет достаточных прав для совершения этого действия.')
+    within("li[data-answer-id=\"#{answer.id}\"]") { expect(page).not_to have_content('Удалить') }
   end
 end
