@@ -12,10 +12,12 @@ RSpec.describe QuestionsController, type: :controller do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
       end
 
-      it 'redirects to the question' do
-        post :create, params: { question: attributes_for(:question) }
+      let(:question_attributes) { attributes_for(:question) }
 
-        expect(response).to redirect_to(Question.find_by(attributes_for(:question)))
+      it 'redirects to the question' do
+        post :create, params: { question: question_attributes }
+
+        expect(response).to redirect_to(Question.find_by(question_attributes))
       end
     end
 

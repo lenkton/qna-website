@@ -13,9 +13,12 @@ feature 'An authorized user can delete his/her own questions', %q(
     log_in(author)
 
     visit question_path(question)
+    expect(page).to have_content(question.title)
+
     click_on('Удалить вопрос')
 
     expect(page).to have_content('Вопрос был успешно удалён!')
+    expect(page).not_to have_content(question.title)
   end
 
   scenario 'A random user tries to delete a question' do
