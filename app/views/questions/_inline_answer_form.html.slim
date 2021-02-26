@@ -1,0 +1,8 @@
+= render 'shared/errors', resource: answer
+
+.field
+  = form.label :body, t('.new_answer')
+  = form.text_area :body
+
+.field
+  = form.submit t('.send_answer')

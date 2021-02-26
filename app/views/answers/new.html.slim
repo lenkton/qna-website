@@ -1,6 +1,0 @@
-h1 = t('.answer_to', title: question.title)
-
-= form_with model: [:question, answer] do |form|
-  = render 'form', form: form
-
-= link_to t('actions.back'), question

@@ -1,2 +1,4 @@
-li
+li data-answer-id=answer.id
   p = answer.body
+  - if current_user&.author_of?(answer)
+    =< link_to t('.destroy'), answer, method: :delete, data: { confirm: t('.confirm') }

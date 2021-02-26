@@ -1,14 +1,53 @@
 ru:
+  activerecord:
+    errors:
+      models:
+        answer:
+          attributes:
+            body:
+              blank: Текст ответа не может быть пустым!
+        question:
+          attributes:
+            body:
+              blank: Текст вопроса не может быть пустым!
+            title:
+              blank: Заголовок вопроса не может быть пустым!
   actions:
     back: Вернуться
+    destroy_confirmation: Вы уверены?
+  alert:
+    requires_authorization: У вас нет достаточных прав для совершения этого действия.
   answers:
+    answer:
+      confirm: Вы уверены?
+      destroy: Удалить
+    create:
+      success: Ответ был успешно создан!
+    destroy:
+      success: Ответ был успешно удалён!
     new:
       answer_to: "Создание ответа к вопросу: \"%{title}\""
+  shared:
+    errors:
+      header: "Обнаружены ошибки:"
+    header:
+      sign_in: Войти
+      sign_out: Выйти
   questions:
+    create:
+      success: Вопрос был успешно создан!
+    destroy:
+      success: Вопрос был успешно удалён!
+    form:
+      create_question: Задать вопрос
     index:
-      create_question: Создать вопрос
+      create_question: Задать вопрос
       questions: Вопросы
+    inline_answer_form:
+      new_answer: "Новый ответ:"
+      send_answer: Ответить
     new:
       question_creation: Создание вопроса
     show:
       add_answer: Добавить ответ
+      delete_question: Удалить вопрос

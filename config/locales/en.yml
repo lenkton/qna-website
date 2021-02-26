@@ -30,18 +30,57 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  activerecord:
+    errors:
+      models:
+        answer:
+          attributes:
+            body:
+              blank: "An answer's body cannot be blank!"
+        question:
+          attributes:
+            body:
+              blank: "A question's title cannot be blank!"
+            title:
+              blank: "A question's body cannot be blank!"
   actions:
     back: Back
+    destroy_confirmation: Are you sure?
+  alert:
+    requires_authorization: You are not authorized to perform this action
   answers:
+    answer:
+      confirm: Are you sure?
+      destroy: Delete
+    create:
+      success: The answer was created successfully!
+    destroy:
+      success: The answer was deleted successfully!
     new:
       answer_to: "Create an answer to the question: \"%{title}\""
+  shared:
+    errors:
+      header: "Errors detected:"
+    header:
+      sign_in: Sign in
+      sign_out: Sign out
   hello: "Hello world"
   questions:
+    create:
+      success: The question has been successfully created!
+    destroy:
+      success: The question has been successfully deleted!
+    form:
+      create_question: Ask the question
     index:
-      create_question: Create a question
+      create_question: Ask a question
       questions: Questions
+    inline_answer_form:
+      new_answer: "New answer:"
+      send_answer: Send
     new:
       question_creation: Question creation
     show:
       add_answer: Add an answer
+      delete_question: Delete question
 
