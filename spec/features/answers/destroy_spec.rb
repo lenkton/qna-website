@@ -28,12 +28,12 @@ feature 'An authorized user can delete his/her own answer', %q(
 
     visit question_path(question)
 
-    within("li[data-answer-id=\"#{answer.id}\"]") { expect(page).not_to have_content('Удалить') }
+    within("li[data-answer-id=\"#{answer.id}\"]") { expect(page).not_to have_link('Удалить') }
   end
 
   scenario 'An unauthenticated user tries to delete an answer' do
     visit question_path(question)
 
-    within("li[data-answer-id=\"#{answer.id}\"]") { expect(page).not_to have_content('Удалить') }
+    within("li[data-answer-id=\"#{answer.id}\"]") { expect(page).not_to have_link('Удалить') }
   end
 end

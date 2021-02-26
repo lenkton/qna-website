@@ -26,12 +26,12 @@ feature 'An authorized user can delete his/her own questions', %q(
 
     visit question_path(question)
 
-    expect(page).not_to have_content('Удалить вопрос')
+    expect(page).not_to have_link('Удалить вопрос')
   end
 
   scenario 'An unauthenticated user tries to delete a question' do
     visit question_path(question)
 
-    expect(page).not_to have_content('Удалить вопрос')
+    expect(page).not_to have_link('Удалить вопрос')
   end
 end
