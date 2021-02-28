@@ -7,7 +7,7 @@ feature 'Authenticated user can write an answer on the question page (without re
 ) do
   given!(:question) { create(:question) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     given(:user) { create(:user) }
 
     background { log_in(user) }
@@ -18,8 +18,7 @@ feature 'Authenticated user can write an answer on the question page (without re
       fill_in 'Новый ответ:', with: 'answer body'
       click_on 'Ответить'
 
-      expect(page).to have_content 'Ответ был успешно создан!'
-      expect(page).to have_content 'answer body'
+      within('#answers') { expect(page).to have_content 'answer body' }
     end
 
     scenario 'writes an answer with errors' do
@@ -29,7 +28,7 @@ feature 'Authenticated user can write an answer on the question page (without re
     end
   end
 
-  scenario 'Unauthenticated user tries to write an answer' do
+  scenario 'Unauthenticated user tries to write an answer', js: true do
     visit question_path(question)
 
     fill_in 'Новый ответ:', with: 'answer body'
