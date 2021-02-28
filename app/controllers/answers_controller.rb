@@ -14,10 +14,9 @@ class AnswersController < ApplicationController
   def destroy
     if current_user&.author_of?(answer)
       answer.destroy
-      redirect_to answer.question, notice: I18n.t('answers.destroy.success')
+      flash.now[:notice] = I18n.t('answers.destroy.success')
     else
       flash.now[:alert] = I18n.t('alert.requires_authorization')
-      render 'questions/show'
     end
   end
 

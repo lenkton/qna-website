@@ -42,13 +42,13 @@ RSpec.describe AnswersController, type: :controller do
       before { log_in(author) }
 
       it 'deletes his/her answer' do
-        expect { delete :destroy, params: { id: answer } }.to change(question.answers, :count).by(-1)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to change(question.answers, :count).by(-1)
       end
 
-      it 'redirects to the question page' do
-        delete :destroy, params: { id: answer }
+      it 'renders the destroy template' do
+        delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to redirect_to question
+        expect(response).to render_template(:destroy)
       end
     end
 
@@ -56,25 +56,25 @@ RSpec.describe AnswersController, type: :controller do
       before { log_in(random_user) }
 
       it 'does not delete the answer in the database' do
-        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'renders the question show view' do
-        delete :destroy, params: { id: answer }
+      it 'renders the destroy template' do
+        delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to render_template('questions/show')
+        expect(response).to render_template(:destroy)
       end
     end
 
     context 'Unauthenticated user' do
       it 'does not delete the answer in the database' do
-        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'renders the question show view' do
-        delete :destroy, params: { id: answer }
+      it 'renders the destroy template' do
+        delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to render_template('questions/show')
+        expect(response).to render_template(:destroy)
       end
     end
   end
