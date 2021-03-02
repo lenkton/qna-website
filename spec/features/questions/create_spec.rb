@@ -15,8 +15,8 @@ feature 'Authenticated user can create question', %q(
     end
 
     scenario 'asks a question' do
-      fill_in 'Title', with: 'Test question'
-      fill_in 'Body', with: 'text text text'
+      fill_in 'Заголовок', with: 'Test question'
+      fill_in 'Содержание', with: 'text text text'
       click_on 'Задать вопрос'
 
       expect(page).to have_content 'Вопрос был успешно создан!'

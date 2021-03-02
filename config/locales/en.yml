@@ -71,7 +71,9 @@ en:
     destroy:
       success: The question has been successfully deleted!
     form:
+      body: Body
       create_question: Ask the question
+      title: Title
     index:
       create_question: Ask a question
       questions: Questions
@@ -83,4 +85,6 @@ en:
     show:
       add_answer: Add an answer
       delete_question: Delete question
+      edit_submit: Save
+      edit_question: Edit question
 

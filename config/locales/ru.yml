@@ -39,7 +39,9 @@ ru:
     destroy:
       success: Вопрос был успешно удалён!
     form:
+      body: Содержание
       create_question: Задать вопрос
+      title: Заголовок
     index:
       create_question: Задать вопрос
       questions: Вопросы
@@ -51,3 +53,5 @@ ru:
     show:
       add_answer: Добавить ответ
       delete_question: Удалить вопрос
+      edit_submit: Сохранить
+      edit_question: Редактировать вопрос
