@@ -14,6 +14,7 @@ ru:
               blank: Заголовок вопроса не может быть пустым!
   actions:
     back: Вернуться
+    cancel: Отменить
     destroy_confirmation: Вы уверены?
   alert:
     requires_authorization: У вас нет достаточных прав для совершения этого действия.
@@ -21,10 +22,14 @@ ru:
     answer:
       confirm: Вы уверены?
       destroy: Удалить
+      edit: Редактировать
+      save: Сохранить
     create:
       success: Ответ был успешно создан!
     destroy:
       success: Ответ был успешно удалён!
+    form:
+      body: Содержание
     new:
       answer_to: "Создание ответа к вопросу: \"%{title}\""
   shared:

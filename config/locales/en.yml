@@ -45,6 +45,7 @@ en:
               blank: "A question's body cannot be blank!"
   actions:
     back: Back
+    cancel: Cancel
     destroy_confirmation: Are you sure?
   alert:
     requires_authorization: You are not authorized to perform this action
@@ -52,10 +53,14 @@ en:
     answer:
       confirm: Are you sure?
       destroy: Delete
+      edit: Edit
+      save: Save
     create:
       success: The answer was created successfully!
     destroy:
       success: The answer was deleted successfully!
+    form:
+      body: Body
     new:
       answer_to: "Create an answer to the question: \"%{title}\""
   shared:

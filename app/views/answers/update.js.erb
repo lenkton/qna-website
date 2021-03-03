@@ -1,0 +1,9 @@
+<% if answer.errors.any? %>
+  document.getElementById('answer-' + <%= answer.id %> + '-edit-errors').innerHTML = '<%= render 'shared/errors', resource: answer %>'
+<% else %>
+  document.getElementById('answer-' + <%= answer.id %> + '-edit-errors').innerHTML = ''
+  document.getElementById('answer-' + <%= answer.id %> + '-edit-form').classList.add('hidden')
+  answerBody = document.getElementById('answer-' + <%= answer.id %> + '-body')
+  answerBody.classList.remove('hidden')
+  answerBody.innerHTML = '<%= answer.body %>'
+<% end %>

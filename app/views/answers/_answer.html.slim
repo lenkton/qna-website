@@ -1,4 +1,14 @@
 li id="answer-#{answer.id}"
-  p = answer.body
+  p id="answer-#{answer.id}-body"
+    = answer.body
   - if current_user&.author_of?(answer)
     =< link_to t('.destroy'), answer, method: :delete, remote: true, data: { confirm: t('.confirm') }
+    =< link_to t('.edit'), '#', class: 'edit-answer-button', data: { answer_id: answer.id }
+  .hidden id="answer-#{answer.id}-edit-form"
+    . id="answer-#{answer.id}-edit-errors"
+    = form_for answer, remote: true do |form|
+      = render 'answers/form', form: form, submit_text: t('.save')
+    = link_to t('actions.cancel'), 
+              '#', id: "answer-#{answer.id}-edit-cancel",
+              class: 'edit-answer-cancel',
+              data: { answer_id: answer.id }

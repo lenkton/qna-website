@@ -8,6 +8,7 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 import "questions/showEditForm"
+import "answers/showEditForm"
 
 Rails.start()
 Turbolinks.start()
