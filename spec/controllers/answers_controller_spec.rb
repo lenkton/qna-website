@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
+  let(:author) { create(:author) }
+  let(:random_user) { create(:user) }
+
   describe 'POST #create' do
     let!(:question) { create(:question) }
-    let(:author) { create(:author) }
 
     before { log_in(author) }
 
@@ -33,8 +35,6 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:author) { create(:author) }
-    let(:random_user) { create(:user) }
     let!(:question) { create(:question) }
     let!(:answer) { create(:answer, author: author, question: question) }
 
@@ -75,6 +75,73 @@ RSpec.describe AnswersController, type: :controller do
         delete :destroy, params: { id: answer }, format: :js
 
         expect(response).to render_template(:destroy)
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    let!(:answer) { create(:answer, author: author, body: 'old body') }
+
+    context 'Author' do
+      before { log_in(author) }
+
+      context 'with valid parameters' do
+        before { patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js }
+
+        it 'updates the answer' do
+          answer.reload
+
+          expect(answer.body).to eq 'new body'
+        end
+
+        it 'renders the update template' do
+          expect(response).to render_template(:update)
+        end
+      end
+
+      context 'with invalid parameters' do
+        before { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js }
+
+        it 'does not change the answer' do
+          answer.reload
+
+          expect(answer.body).to eq 'old body'
+        end
+
+        it 'renders the update template' do
+          expect(response).to render_template(:update)
+        end
+      end
+    end
+
+    context 'Random user' do
+      before do
+        log_in(random_user)
+        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+      end
+
+      it 'does not change the answer' do
+        answer.reload
+
+        expect(answer.body).to eq 'old body'
+      end
+
+      it 'renders the update template' do
+        expect(response).to render_template(:update)
+      end
+    end
+
+    context 'Unauthenticated user' do
+      before { patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js }
+
+      it 'does not change the answer' do
+        answer.reload
+
+        expect(answer.body).to eq 'old body'
+      end
+
+      it 'renders the update template' do
+        expect(response).to render_template(:update)
       end
     end
   end
