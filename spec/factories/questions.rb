@@ -11,6 +11,7 @@ FactoryBot.define do
     title { generate(:question_title) }
     body { generate(:question_body) }
     author
+    best_answer { nil }
 
     trait :invalid do
       title { nil }

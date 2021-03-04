@@ -1,14 +1,12 @@
 require 'rails_helper'
 
-ANSWERS_LIST_SIZE = 5
-
 feature 'User can inspect the question and its answers', %q(
   In order to find a solution to my problem
   As a user
   I'd like to be able to inspect the question of interest and read the users' answers
 ) do
   let!(:question) { create(:question) }
-  let!(:answers) { create_list(:answer, ANSWERS_LIST_SIZE, question: question) }
+  let!(:answers) { create_list(:answer, ANSWERS_DEFAULT_LIST_SIZE, question: question) }
 
   scenario 'User sees the header, the body and the answers of the question' do
     visit(question_path(question))

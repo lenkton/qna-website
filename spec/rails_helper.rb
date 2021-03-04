@@ -75,3 +75,6 @@ RSpec.configure do |config|
     end
   end
 end
+
+# constants for use in tests
+ANSWERS_DEFAULT_LIST_SIZE = 5

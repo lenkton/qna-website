@@ -3,7 +3,9 @@ class QuestionsController < ApplicationController
   expose :question
   expose :questions, -> { Question.all }
   expose :answers, -> { question.answers }
-  expose :answer, -> { question.answers.new }
+  expose :answer,
+         scope: -> { question.answers },
+         id: -> { params[:answer_id] }
 
   def create
     if current_user.questions << question
@@ -24,6 +26,9 @@ class QuestionsController < ApplicationController
 
   def update
     question.update(question_params) if current_user&.author_of?(question)
+  end
+
+  def set_best_answer
   end
 
   private
