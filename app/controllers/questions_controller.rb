@@ -29,6 +29,7 @@ class QuestionsController < ApplicationController
   end
 
   def set_best_answer
+    question.update(best_answer_id: params[:answer_id]) if current_user&.author_of?(question)
   end
 
   private

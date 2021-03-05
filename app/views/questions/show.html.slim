@@ -12,7 +12,10 @@
     = link_to t('actions.cancel'), '#', id: 'question-edit-cancel'
 
 ul#answers
-  = render answers
+  #best-answer
+    - if question.best_answer.present?
+      = render question.best_answer
+  = render(answers - [question.best_answer])
 
 #answer-errors
   = render 'shared/errors', resource: answer

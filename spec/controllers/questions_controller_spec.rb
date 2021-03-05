@@ -156,11 +156,12 @@ RSpec.describe QuestionsController, type: :controller do
     let!(:answer) { create(:answer, question: question) }
 
     context 'Author' do
+      before { log_in author }
+
       context 'valid params' do
         before { post :set_best_answer, params: { id: question, answer_id: answer }, format: :js }
 
         it 'set the passed answer as the best' do
-          expect(question.best_answer).not_to eq answer # temporary, for debugging purposes
           question.reload
           expect(question.best_answer).to eq answer
         end
@@ -180,7 +181,7 @@ RSpec.describe QuestionsController, type: :controller do
           question.reload
           expect(question.best_answer).to eq original_best_answer
         end
-  
+
         it 'renders set_best_answer template' do
           expect(response).to render_template :set_best_answer
         end

@@ -1,0 +1,12 @@
+<% if question.best_answer.present? %>
+  answerList = document.getElementById('answers')
+  bestAnswer = document.getElementById('best-answer')
+  previousBestAnswer = bestAnswer.querySelector('.answer')
+
+  if(previousBestAnswer){
+    answerList.appendChild(previousBestAnswer)
+  }
+
+  newBestAnswer = document.getElementById('answer-' + <%= answer.id %>)
+  bestAnswer.appendChild(newBestAnswer)
+<% end %>

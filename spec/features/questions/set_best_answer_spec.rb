@@ -27,6 +27,8 @@ feature 'The author of a question can choose the best answer to it', %q(
         expect(page).to have_content(answer.body)
         other_answers.each { |other_answer| expect(page).not_to have_content(other_answer.body) }
       end
+
+      expect(page.all(:css, '.answer').first).to have_content answer.body
     end
 
     given(:another_answer) { other_answers[3] }
@@ -38,7 +40,7 @@ feature 'The author of a question can choose the best answer to it', %q(
 
       within '#best-answer' do
         expect(page).to have_content(another_answer.body)
-        (answers - another_answer).each { |other_answer| expect(page).not_to have_content(other_answer.body) }
+        (answers - [another_answer]).each { |other_answer| expect(page).not_to have_content(other_answer.body) }
       end
     end
   end

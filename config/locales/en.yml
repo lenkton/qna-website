@@ -54,6 +54,7 @@ en:
       confirm: Are you sure?
       destroy: Delete
       edit: Edit
+      mark_best_answer: Mark as the best
       save: Save
     create:
       success: The answer was created successfully!
@@ -75,6 +76,8 @@ en:
       success: The question has been successfully created!
     destroy:
       success: The question has been successfully deleted!
+    errors:
+      not_in_answers: is not an answer of the question
     form:
       body: Body
       create_question: Ask the question

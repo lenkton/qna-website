@@ -23,6 +23,7 @@ ru:
       confirm: Вы уверены?
       destroy: Удалить
       edit: Редактировать
+      mark_best_answer: Отметить как лучший
       save: Сохранить
     create:
       success: Ответ был успешно создан!
@@ -43,6 +44,8 @@ ru:
       success: Вопрос был успешно создан!
     destroy:
       success: Вопрос был успешно удалён!
+    errors:
+      not_in_answers: не является ответом на этот вопрос
     form:
       body: Содержание
       create_question: Задать вопрос

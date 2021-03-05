@@ -5,5 +5,5 @@
   document.getElementById('answer-' + <%= answer.id %> + '-edit-form').classList.add('hidden')
   answerBody = document.getElementById('answer-' + <%= answer.id %> + '-body')
   answerBody.classList.remove('hidden')
-  answerBody.innerHTML = '<%= answer.body %>'
+  answerBody.innerHTML = '<%= j answer.body %>'
 <% end %>
