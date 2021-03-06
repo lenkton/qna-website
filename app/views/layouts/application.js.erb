@@ -1,0 +1,8 @@
+<% if notice.present? %>
+  document.getElementById('notice').innerHTML = '<%= notice %>'
+<% end %>
+<% if alert.present? %>
+  document.getElementById('alert').innerHTML = '<%= alert %>'
+<% end %>
+
+<%= yield %>

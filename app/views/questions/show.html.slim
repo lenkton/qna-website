@@ -1,12 +1,26 @@
-h1 = question.title
-- if current_user&.author_of?(question)
-  = link_to t('.delete_question'), question_path(question), method: :delete, data: { confirm: t('actions.destroy_confirmation') }
+#question
+  h1#question-title = question.title
+  - if current_user&.author_of?(question)
+    = link_to t('.delete_question'), question_path(question), method: :delete, data: { confirm: t('actions.destroy_confirmation') }
+    = link_to t('.edit_question'), '#', id: 'question-edit-button'
 
-p = question.body
-ul
-  = render answers
+  p#question-body = question.body
+#question-edit-form.hidden
+  #question-errors
+  = form_for question, remote: true do |form|
+    = render 'form', form: form, submit_text: t('.edit_submit')
+    = link_to t('actions.cancel'), '#', id: 'question-edit-cancel'
 
-= form_with url: question_answers_path(question), scope: :answer, local: true do |form|
-  = render 'questions/inline_answer_form', form: form
+ul#answers
+  #best-answer
+    - if question.best_answer.present?
+      = render question.best_answer
+  = render(answers - [question.best_answer])
+
+- if user_signed_in?
+  #answer-errors
+    = render 'shared/errors', resource: answer
+  = form_for [question, answer], remote: true do |form|
+    = render 'questions/inline_answer_form', form: form
 
 = link_to t('actions.back'), questions_path

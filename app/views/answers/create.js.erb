@@ -1,0 +1,9 @@
+<% if answer.errors.any? %>
+  document.getElementById('answer-errors').innerHTML = '<%= render 'shared/errors', resource: answer%>'
+<% end %>
+
+<% if answer.persisted? %>
+  document.getElementById('answers').innerHTML += '<%= j render answer %>'
+
+  document.getElementById('answer_body').value = ''
+<% end %>

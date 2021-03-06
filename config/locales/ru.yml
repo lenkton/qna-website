@@ -14,6 +14,7 @@ ru:
               blank: Заголовок вопроса не может быть пустым!
   actions:
     back: Вернуться
+    cancel: Отменить
     destroy_confirmation: Вы уверены?
   alert:
     requires_authorization: У вас нет достаточных прав для совершения этого действия.
@@ -21,10 +22,15 @@ ru:
     answer:
       confirm: Вы уверены?
       destroy: Удалить
+      edit: Редактировать
+      mark_best_answer: Отметить как лучший
+      save: Сохранить
     create:
       success: Ответ был успешно создан!
     destroy:
       success: Ответ был успешно удалён!
+    form:
+      body: Содержание
     new:
       answer_to: "Создание ответа к вопросу: \"%{title}\""
   shared:
@@ -38,8 +44,12 @@ ru:
       success: Вопрос был успешно создан!
     destroy:
       success: Вопрос был успешно удалён!
+    errors:
+      not_in_answers: не является ответом на этот вопрос
     form:
+      body: Содержание
       create_question: Задать вопрос
+      title: Заголовок
     index:
       create_question: Задать вопрос
       questions: Вопросы
@@ -51,3 +61,5 @@ ru:
     show:
       add_answer: Добавить ответ
       delete_question: Удалить вопрос
+      edit_submit: Сохранить
+      edit_question: Редактировать вопрос

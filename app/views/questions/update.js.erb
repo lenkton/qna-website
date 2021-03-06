@@ -1,0 +1,10 @@
+<% if question.errors.any? %>
+  document.getElementById('question-errors').innerHTML = '<%= render 'shared/errors', resource: question %>'
+<% else %>
+  document.getElementById('question-errors').innerHTML = ''
+  document.getElementById('question-edit-form').classList.add('hidden')
+  document.getElementById('question').classList.remove('hidden')
+
+  document.getElementById('question-title').innerHTML = '<%= j question.title %>'
+  document.getElementById('question-body').innerHTML = '<%= j question.body %>'
+<% end %>

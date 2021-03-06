@@ -10,14 +10,14 @@ feature 'An authorized user can delete his/her own answer', %q(
   given!(:question) { create(:question) }
   given!(:answer) { create(:answer, author: author, question: question) }
 
-  scenario 'An author deletes his/her answer' do
+  scenario 'An author deletes his/her answer', js: true do
     log_in(author)
 
     visit question_path(question)
 
     expect(page).to have_content(answer.body)
 
-    within("li[data-answer-id=\"#{answer.id}\"]") { click_on('Удалить') }
+    within("\#answer-#{answer.id}") { accept_alert { click_on('Удалить') } }
 
     expect(page).to have_content('Ответ был успешно удалён!')
     expect(page).not_to have_content(answer.body)
@@ -28,12 +28,12 @@ feature 'An authorized user can delete his/her own answer', %q(
 
     visit question_path(question)
 
-    within("li[data-answer-id=\"#{answer.id}\"]") { expect(page).not_to have_link('Удалить') }
+    within("\#answer-#{answer.id}") { expect(page).not_to have_link('Удалить') }
   end
 
   scenario 'An unauthenticated user tries to delete an answer' do
     visit question_path(question)
 
-    within("li[data-answer-id=\"#{answer.id}\"]") { expect(page).not_to have_link('Удалить') }
+    within("\#answer-#{answer.id}") { expect(page).not_to have_link('Удалить') }
   end
 end

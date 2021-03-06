@@ -1,0 +1,6 @@
+.field
+  = form.label :body, t('.body')
+  = form.text_area :body
+
+.field
+  = form.submit (submit_text ||= t('.create_answer'))

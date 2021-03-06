@@ -1,12 +1,12 @@
 = render 'shared/errors', resource: question
 
 .field
-  = form.label :title
+  = form.label :title, t('.title')
   = form.text_field :title
 
 .field
-  = form.label :body
+  = form.label :body, t('.body')
   = form.text_area :body
 
 .field
-  = form.submit t('.create_question')
+  = form.submit (submit_text ||= t('.create_question'))

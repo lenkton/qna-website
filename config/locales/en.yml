@@ -45,6 +45,7 @@ en:
               blank: "A question's body cannot be blank!"
   actions:
     back: Back
+    cancel: Cancel
     destroy_confirmation: Are you sure?
   alert:
     requires_authorization: You are not authorized to perform this action
@@ -52,10 +53,15 @@ en:
     answer:
       confirm: Are you sure?
       destroy: Delete
+      edit: Edit
+      mark_best_answer: Mark as the best
+      save: Save
     create:
       success: The answer was created successfully!
     destroy:
       success: The answer was deleted successfully!
+    form:
+      body: Body
     new:
       answer_to: "Create an answer to the question: \"%{title}\""
   shared:
@@ -70,8 +76,12 @@ en:
       success: The question has been successfully created!
     destroy:
       success: The question has been successfully deleted!
+    errors:
+      not_in_answers: is not an answer of the question
     form:
+      body: Body
       create_question: Ask the question
+      title: Title
     index:
       create_question: Ask a question
       questions: Questions
@@ -83,4 +93,6 @@ en:
     show:
       add_answer: Add an answer
       delete_question: Delete question
+      edit_submit: Save
+      edit_question: Edit question
 
