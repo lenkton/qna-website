@@ -31,9 +31,7 @@ feature 'Authenticated user can write an answer on the question page (without re
   scenario 'Unauthenticated user tries to write an answer', js: true do
     visit question_path(question)
 
-    fill_in 'Новый ответ:', with: 'answer body'
-    click_on 'Ответить'
-
-    expect(page).to have_content 'Вам необходимо войти в систему или зарегистрироваться.'
+    expect(page).not_to have_field 'Новый ответ:'
+    expect(page).not_to have_field 'Ответить'
   end
 end

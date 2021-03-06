@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: %i[create new]
+  before_action :authenticate_user!, only: %i[create new update destroy set_best_answer]
+
   expose :question
   expose :questions, -> { Question.all }
   expose :answers, -> { question.answers }
@@ -16,7 +17,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if current_user&.author_of?(question)
+    if current_user.author_of?(question)
       question.destroy
       redirect_to questions_path, notice: I18n.t('questions.destroy.success')
     else
@@ -25,11 +26,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    question.update(question_params) if current_user&.author_of?(question)
+    question.update(question_params) if current_user.author_of?(question)
   end
 
   def set_best_answer
-    question.update(best_answer_id: params[:answer_id]) if current_user&.author_of?(question)
+    question.update(best_answer_id: params[:answer_id]) if current_user.author_of?(question)
   end
 
   private

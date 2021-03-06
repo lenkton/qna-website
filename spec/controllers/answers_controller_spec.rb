@@ -65,18 +65,6 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to render_template(:destroy)
       end
     end
-
-    context 'Unauthenticated user' do
-      it 'does not delete the answer in the database' do
-        expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
-      end
-
-      it 'renders the destroy template' do
-        delete :destroy, params: { id: answer }, format: :js
-
-        expect(response).to render_template(:destroy)
-      end
-    end
   end
 
   describe 'PATCH #update' do
@@ -119,20 +107,6 @@ RSpec.describe AnswersController, type: :controller do
         log_in(random_user)
         patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
       end
-
-      it 'does not change the answer' do
-        answer.reload
-
-        expect(answer.body).to eq 'old body'
-      end
-
-      it 'renders the update template' do
-        expect(response).to render_template(:update)
-      end
-    end
-
-    context 'Unauthenticated user' do
-      before { patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js }
 
       it 'does not change the answer' do
         answer.reload

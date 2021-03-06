@@ -17,9 +17,10 @@ ul#answers
       = render question.best_answer
   = render(answers - [question.best_answer])
 
-#answer-errors
-  = render 'shared/errors', resource: answer
-= form_for [question, answer], remote: true do |form|
-  = render 'questions/inline_answer_form', form: form
+- if user_signed_in?
+  #answer-errors
+    = render 'shared/errors', resource: answer
+  = form_for [question, answer], remote: true do |form|
+    = render 'questions/inline_answer_form', form: form
 
 = link_to t('actions.back'), questions_path
