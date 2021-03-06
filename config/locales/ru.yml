@@ -49,6 +49,7 @@ ru:
     form:
       body: Содержание
       create_question: Задать вопрос
+      files: Прикреплённые файлы
       title: Заголовок
     index:
       create_question: Задать вопрос

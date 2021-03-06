@@ -81,6 +81,7 @@ en:
     form:
       body: Body
       create_question: Ask the question
+      files: Attached files
       title: Title
     index:
       create_question: Ask a question

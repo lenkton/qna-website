@@ -5,6 +5,10 @@
     = link_to t('.edit_question'), '#', id: 'question-edit-button'
 
   p#question-body = question.body
+  ul#question-files
+    - if question.files.attached?
+      - question.files.each do |file|
+        li = link_to file.filename.to_s, url_for(file)
 #question-edit-form.hidden
   #question-errors
   = form_for question, remote: true do |form|
