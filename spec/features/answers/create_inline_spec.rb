@@ -23,7 +23,7 @@ feature 'Authenticated user can write an answer on the question page (without re
         within('#answers') { expect(page).to have_content 'answer body' }
       end
 
-      scenario 'writes an answer with attached files', js: false do
+      scenario 'writes an answer with attached files' do
         attach_file 'Прикреплённые файлы', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
         click_on 'Ответить'
 

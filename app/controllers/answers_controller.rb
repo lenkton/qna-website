@@ -2,7 +2,9 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, only: %i[create destroy update]
 
   expose :question, id: -> { params[:question_id] || Answer.find(params[:id]).question_id }
-  expose :answer, build_params: -> { { author: current_user, question: question }.merge(answer_params) }
+  expose :answer,
+         build_params: -> { { author: current_user, question: question }.merge(answer_params) },
+         scope: -> { Answer.with_attached_files }
   expose :answers, -> { question.answers }
 
   def create
@@ -25,6 +27,6 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, files: [])
   end
 end

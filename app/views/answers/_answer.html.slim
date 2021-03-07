@@ -1,6 +1,8 @@
 li.answer id="answer-#{answer.id}"
   p id="answer-#{answer.id}-body"
     = answer.body
+  ul id="answer-#{answer.id}-files"
+    = render collection: answer.files, partial: 'shared/file'
   - if current_user&.author_of?(answer)
     =< link_to t('.destroy'), answer, method: :delete, remote: true, data: { confirm: t('.confirm') }
     =< link_to t('.edit'), '#', class: 'edit-answer-button', data: { answer_id: answer.id }
