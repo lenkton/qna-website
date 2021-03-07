@@ -55,6 +55,7 @@ ru:
       create_question: Задать вопрос
       questions: Вопросы
     inline_answer_form:
+      files: Прикреплённые файлы
       new_answer: "Новый ответ:"
       send_answer: Ответить
     new:

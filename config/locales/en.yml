@@ -87,6 +87,7 @@ en:
       create_question: Ask a question
       questions: Questions
     inline_answer_form:
+      files: Attached files
       new_answer: "New answer:"
       send_answer: Send
     new:

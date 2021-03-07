@@ -3,4 +3,8 @@
   = form.text_area :body
 
 .field
+  = form.label :files, t('.files')
+  = form.file_field :files, multiple: true
+
+.field
   = form.submit t('.send_answer')
