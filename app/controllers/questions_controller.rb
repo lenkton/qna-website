@@ -10,6 +10,7 @@ class QuestionsController < ApplicationController
 
   def create
     if current_user.questions << question
+      add_files
       redirect_to question, notice: I18n.t('questions.create.success')
     else
       render :new
@@ -26,7 +27,10 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    question.update(question_params) if current_user.author_of?(question)
+    if current_user.author_of?(question)
+      question.update(question_params)
+      add_files
+    end
   end
 
   def set_best_answer
@@ -35,7 +39,11 @@ class QuestionsController < ApplicationController
 
   private
 
+  def add_files
+    question.files.attach(params[:question][:files]) if params[:question][:files]
+  end
+
   def question_params
-    params.require(:question).permit(:title, :body, files: [])
+    params.require(:question).permit(:title, :body)
   end
 end

@@ -7,4 +7,7 @@
 
   document.getElementById('question-title').innerHTML = '<%= j question.title %>'
   document.getElementById('question-body').innerHTML = '<%= j question.body %>'
+  document.getElementById('question-files').innerHTML = '<%= render collection: question.files, partial: "shared/file" %>'
+
+  document.getElementById('question_files').value = ''
 <% end %>
