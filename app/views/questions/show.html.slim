@@ -24,6 +24,6 @@ ul#answers
   #answer-errors
     = render 'shared/errors', resource: answer
   = form_for [question, answer], remote: true do |form|
-    = render 'questions/inline_answer_form', form: form
+    = render 'answers/form', form: form, body_name: t('.new_answer'), submit_text: t('.send_answer')
 
 = link_to t('actions.back'), questions_path

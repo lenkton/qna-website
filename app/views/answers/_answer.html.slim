@@ -8,7 +8,7 @@ li.answer id="answer-#{answer.id}"
     =< link_to t('.edit'), '#', class: 'edit-answer-button', data: { answer_id: answer.id }
   .hidden id="answer-#{answer.id}-edit-form"
     . id="answer-#{answer.id}-edit-errors"
-    = form_for answer, remote: true do |form|
+    = form_for answer, remote: true, namespace: "edit_#{answer.id}" do |form|
       = render 'answers/form', form: form, submit_text: t('.save')
     = link_to t('actions.cancel'), 
               '#', id: "answer-#{answer.id}-edit-cancel",

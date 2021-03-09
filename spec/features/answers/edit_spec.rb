@@ -38,6 +38,39 @@ feature 'User can edit his/her answer', %q(
       end
     end
 
+    describe 'adds files to the answer' do
+      background do
+        within "#answer-#{answer.id}-edit-form" do
+          attach_file 'Прикреплённые файлы', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+          click_on 'Сохранить'
+        end
+      end
+
+      scenario 'with no previously added files' do
+        within "#answer-#{answer.id}" do
+          expect(page).not_to have_button('Прикреплённые файлы')
+          expect(page).to have_link 'rails_helper.rb'
+          expect(page).to have_link 'spec_helper.rb'
+        end
+      end
+
+      scenario 'with previously added files' do
+        within("#answer-#{answer.id}") { click_on('Редактировать') }
+
+        within "#answer-#{answer.id}-edit-form" do
+          attach_file 'Прикреплённые файлы', ["#{Rails.root}/Gemfile", "#{Rails.root}/Gemfile.lock"]
+          click_on 'Сохранить'
+        end
+
+        within "#answer-#{answer.id}" do
+          expect(page).to have_link 'rails_helper.rb'
+          expect(page).to have_link 'spec_helper.rb'
+          expect(page).to have_link 'Gemfile'
+          expect(page).to have_link 'Gemfile.lock'
+        end
+      end
+    end
+
     describe 'with errors' do
       background do
         within '#answers' do
