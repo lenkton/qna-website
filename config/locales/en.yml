@@ -68,6 +68,9 @@ en:
   shared:
     errors:
       header: "Errors detected:"
+    file:
+      confirm: Are you sure?
+      delete: Delete
     header:
       sign_in: Sign in
       sign_out: Sign out

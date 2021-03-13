@@ -37,6 +37,9 @@ ru:
   shared:
     errors:
       header: "Обнаружены ошибки:"
+    file:
+      confirm: Вы уверены?
+      delete: Удалить
     header:
       sign_in: Войти
       sign_out: Выйти

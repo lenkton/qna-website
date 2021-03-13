@@ -1,13 +1,11 @@
-document.addEventListener('turbolinks:load', function(){
-  let editButtons = document.querySelectorAll('.edit-answer-button')
-  if (editButtons) editButtons.forEach(element => {
-    element.addEventListener('click', showEditForm)
-  });
-
-  let cancels = document.querySelectorAll('.edit-answer-cancel')
-  if (cancels) cancels.forEach(element => {
-    element.addEventListener('click', hideEditForm)
-  });
+document.addEventListener('turbolinks:load', function(event){
+  if(answers = document.getElementById('answers'))
+    answers.addEventListener('click', function(answersEvent){
+      if(answersEvent.target.classList.contains('edit-answer-button'))
+        showEditForm(answersEvent)
+      if(answersEvent.target.classList.contains('edit-answer-cancel'))
+        hideEditForm(answersEvent)
+    })
 })
 
 function showEditForm(e){

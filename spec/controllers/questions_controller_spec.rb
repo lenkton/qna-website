@@ -179,4 +179,53 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #purge_file' do
+    let!(:question) { create(:question_with_files, author: author) }
+    let(:file) { question.files.first }
+
+    context 'Author' do
+      before { log_in author }
+
+      context 'with valid params' do
+        it 'purges a file' do
+          expect { delete :purge_file, params: { id: question, file_id: file }, format: :js }.to change(question.files, :count).by(-1)
+        end
+
+        it 'renders a purge_file template' do
+          delete :purge_file, params: { id: question, file_id: file }, format: :js
+
+          expect(response).to render_template :purge_file
+        end
+      end
+      
+      context 'with invalid params' do
+        let(:random_file) { create(:question_with_files).files.first }
+
+        it 'purges no file' do
+          expect { delete :purge_file, params: { id: question, file_id: random_file }, format: :js }.not_to change(question.files, :count)
+        end
+
+        it 'renders a purge_file template' do
+          delete :purge_file, params: { id: question, file_id: random_file }, format: :js
+
+          expect(response).to render_template :purge_file
+        end
+      end
+    end
+
+    context 'Random user' do
+      before { log_in random_user }
+
+      it 'purges no file' do
+        expect { delete :purge_file, params: { id: question, file_id: file }, format: :js }.not_to change(question.files, :count)
+      end
+
+      it 'renders a purge_file template' do
+        delete :purge_file, params: { id: question, file_id: file }, format: :js
+
+        expect(response).to render_template :purge_file
+      end
+    end
+  end
 end

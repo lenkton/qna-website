@@ -7,7 +7,7 @@
   p#question-body = question.body
   ul#question-files
     - if question.files.attached?
-      = render collection: question.files, partial: 'shared/file'
+      = render collection: question.files, partial: 'shared/file', locals: { resource: question }
 #question-edit-form.hidden
   #question-errors
   = form_for question, remote: true do |form|

@@ -55,6 +55,8 @@ feature 'User can edit his/her answer', %q(
       end
 
       scenario 'with previously added files' do
+        expect(page).to have_link 'rails_helper.rb' # to prevent race conditions
+
         within("#answer-#{answer.id}") { click_on('Редактировать') }
 
         within "#answer-#{answer.id}-edit-form" do

@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   resources :questions, only: %i[index show new create destroy update] do
     resources :answers, only: %i[create destroy update], shallow: true
 
-    post :set_best_answer, on: :member
+    member do
+      post :set_best_answer
+      delete :purge_file
+    end
   end
 end

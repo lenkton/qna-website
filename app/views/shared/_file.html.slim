@@ -1,1 +1,9 @@
-li = link_to file.filename.to_s, url_for(file)
+li id="file-#{file.id}"
+  = link_to file.filename.to_s, url_for(file)
+  - if (resource ||= nil) && current_user&.author_of?(resource)
+    = button_to t('.delete'),
+                file_delete_path(resource),
+                method: :delete,
+                remote: true,
+                params: { file_id: file.id },
+                data: { confirm: t('.confirm') }
