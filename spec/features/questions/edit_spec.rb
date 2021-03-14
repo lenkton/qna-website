@@ -41,7 +41,7 @@ feature 'User can edit his/her question', %q(
       end
 
       describe 'adds files to the question' do
-  
+
         scenario 'with no previously added files' do
           within '#question' do
             expect(page).not_to have_button('Прикреплённые файлы')
@@ -49,15 +49,15 @@ feature 'User can edit his/her question', %q(
             expect(page).to have_link 'spec_helper.rb'
           end
         end
-  
+
         scenario 'with previously added files' do
           click_on('Редактировать вопрос')
-  
+
           within '#question-edit-form' do
             attach_file 'Прикреплённые файлы', ["#{Rails.root}/Gemfile", "#{Rails.root}/Gemfile.lock"]
             click_on 'Сохранить'
           end
-  
+
           expect(page).to have_link 'rails_helper.rb'
           expect(page).to have_link 'spec_helper.rb'
           expect(page).to have_link 'Gemfile'

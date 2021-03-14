@@ -10,4 +10,5 @@
   document.getElementById('question-files').innerHTML = '<%= render collection: question.files, partial: "shared/file", locals: { resource: question } %>'
 
   document.getElementById('question_files').value = ''
+  document.getElementById('question_files').disabled = false
 <% end %>
