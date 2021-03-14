@@ -71,6 +71,15 @@ feature 'User can edit his/her answer', %q(
           expect(page).to have_link 'Gemfile.lock'
         end
       end
+
+      scenario 'then deletes a file' do
+        expect(page).to have_link 'rails_helper.rb' # to prevent race conditions
+        answer.reload
+
+        within("#file-#{answer.files.first.id}") { accept_alert { click_on('Удалить') } }
+
+        expect(page).not_to have_link(answer.files.first.filename.to_s)
+      end
     end
 
     describe 'with errors' do

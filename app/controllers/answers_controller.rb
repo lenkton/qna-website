@@ -6,6 +6,7 @@ class AnswersController < ApplicationController
          build_params: -> { { author: current_user, question: question }.merge(answer_params) },
          scope: -> { Answer.with_attached_files }
   expose :answers, -> { question.answers }
+  expose :file, -> { answer.files.find_by(id: params[:file_id]) }
 
   def create
     if answer.save
@@ -28,6 +29,10 @@ class AnswersController < ApplicationController
       answer.update(answer_params)
       add_files
     end
+  end
+
+  def purge_file
+    file.purge if file.present? && current_user.author_of?(answer)
   end
 
   private
