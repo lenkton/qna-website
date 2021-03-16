@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: %i[create new update destroy set_best_answer purge_file]
+  before_action :authenticate_user!, only: %i[create new update destroy set_best_answer]
 
   expose :question, scope: -> { Question.with_attached_files }
   expose :questions, -> { Question.all }
@@ -7,7 +7,6 @@ class QuestionsController < ApplicationController
   expose :answer,
          scope: -> { question.answers },
          id: -> { params[:answer_id] }
-  expose :file, -> { question.files.find_by(id: params[:file_id]) }
 
   def create
     if current_user.questions << question
@@ -36,12 +35,6 @@ class QuestionsController < ApplicationController
 
   def set_best_answer
     question.update(best_answer_id: params[:answer_id]) if current_user.author_of?(question)
-  end
-
-  def purge_file
-    if current_user.author_of?(question)
-      file.purge unless file.nil?
-    end
   end
 
   private
