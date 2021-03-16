@@ -8,4 +8,6 @@ Rails.application.routes.draw do
 
     post :set_best_answer, on: :member
   end
+
+  resources :files, only: [:destroy]
 end

@@ -4,6 +4,8 @@ class Question < ApplicationRecord
 
   belongs_to :author, class_name: 'User'
 
+  has_many_attached :files
+
   validates :title, :body, presence: true
   validate :validate_best_answer_in_answers
 

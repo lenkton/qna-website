@@ -31,11 +31,15 @@ ru:
       success: Ответ был успешно удалён!
     form:
       body: Содержание
+      files: Прикреплённые файлы
     new:
       answer_to: "Создание ответа к вопросу: \"%{title}\""
   shared:
     errors:
       header: "Обнаружены ошибки:"
+    file:
+      confirm: Вы уверены?
+      delete: Удалить
     header:
       sign_in: Войти
       sign_out: Выйти
@@ -49,13 +53,11 @@ ru:
     form:
       body: Содержание
       create_question: Задать вопрос
+      files: Прикреплённые файлы
       title: Заголовок
     index:
       create_question: Задать вопрос
       questions: Вопросы
-    inline_answer_form:
-      new_answer: "Новый ответ:"
-      send_answer: Ответить
     new:
       question_creation: Создание вопроса
     show:
@@ -63,3 +65,5 @@ ru:
       delete_question: Удалить вопрос
       edit_submit: Сохранить
       edit_question: Редактировать вопрос
+      new_answer: "Новый ответ:"
+      send_answer: Ответить

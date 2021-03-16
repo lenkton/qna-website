@@ -16,5 +16,14 @@ FactoryBot.define do
     trait :invalid do
       title { nil }
     end
+
+    factory :question_with_files do
+      after(:create) do |question, evaluator|
+        question.files.attach(io: File.open('Gemfile'), filename: 'Gemfile')
+        question.files.attach(io: File.open('Gemfile.lock'), filename: 'Gemfile.lock')
+
+        question.reload
+      end
+    end
   end
 end

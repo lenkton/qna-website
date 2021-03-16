@@ -9,4 +9,8 @@
   = form.text_area :body
 
 .field
+  = form.label :files, t('.files')
+  = form.file_field :files, multiple: true, direct_upload: true
+
+.field
   = form.submit (submit_text ||= t('.create_question'))

@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, only: %i[create new update destroy set_best_answer]
 
-  expose :question
+  expose :question, scope: -> { Question.with_attached_files }
   expose :questions, -> { Question.all }
   expose :answers, -> { question.answers }
   expose :answer,
@@ -10,6 +10,7 @@ class QuestionsController < ApplicationController
 
   def create
     if current_user.questions << question
+      add_files
       redirect_to question, notice: I18n.t('questions.create.success')
     else
       render :new
@@ -26,7 +27,10 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    question.update(question_params) if current_user.author_of?(question)
+    if current_user.author_of?(question)
+      question.update(question_params)
+      add_files
+    end
   end
 
   def set_best_answer
@@ -34,6 +38,10 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def add_files
+    question.files.attach(params[:question][:files]) if params[:question][:files]
+  end
 
   def question_params
     params.require(:question).permit(:title, :body)

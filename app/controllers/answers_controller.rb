@@ -2,11 +2,16 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, only: %i[create destroy update]
 
   expose :question, id: -> { params[:question_id] || Answer.find(params[:id]).question_id }
-  expose :answer, build_params: -> { { author: current_user, question: question }.merge(answer_params) }
+  expose :answer,
+         build_params: -> { { author: current_user, question: question }.merge(answer_params) },
+         scope: -> { Answer.with_attached_files }
   expose :answers, -> { question.answers }
 
   def create
-    flash.now[:notice] = I18n.t('answers.create.success') if answer.save
+    if answer.save
+      flash.now[:notice] = I18n.t('answers.create.success')
+      add_files
+    end
   end
 
   def destroy
@@ -19,12 +24,19 @@ class AnswersController < ApplicationController
   end
 
   def update
-    answer.update(answer_params) if current_user.author_of?(answer)
+    if current_user.author_of?(answer)
+      answer.update(answer_params)
+      add_files
+    end
   end
 
   private
 
   def answer_params
     params.require(:answer).permit(:body)
+  end
+
+  def add_files
+    answer.files.attach(params[:answer][:files]) if params[:answer][:files]
   end
 end

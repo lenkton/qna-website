@@ -32,6 +32,48 @@ feature 'User can edit his/her question', %q(
       end
     end
 
+    describe 'interacts with files' do
+      background do
+        within '#question-edit-form' do
+          attach_file 'Прикреплённые файлы', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+          click_on 'Сохранить'
+        end
+      end
+
+      describe 'adds files to the question' do
+
+        scenario 'with no previously added files' do
+          within '#question' do
+            expect(page).not_to have_button('Прикреплённые файлы')
+            expect(page).to have_link 'rails_helper.rb'
+            expect(page).to have_link 'spec_helper.rb'
+          end
+        end
+
+        scenario 'with previously added files' do
+          click_on('Редактировать вопрос')
+
+          within '#question-edit-form' do
+            attach_file 'Прикреплённые файлы', ["#{Rails.root}/Gemfile", "#{Rails.root}/Gemfile.lock"]
+            click_on 'Сохранить'
+          end
+
+          expect(page).to have_link 'rails_helper.rb'
+          expect(page).to have_link 'spec_helper.rb'
+          expect(page).to have_link 'Gemfile'
+          expect(page).to have_link 'Gemfile.lock'
+        end
+      end
+
+      scenario 'deletes a file' do
+        expect(page).to have_link 'rails_helper.rb' # to prevent race conditions
+        question.reload
+        within("#file-#{question.files.first.id}") { accept_alert { click_on('Удалить') } }
+
+        expect(page).not_to have_link(question.files.first.filename.to_s)
+      end
+    end
+
     describe 'with errors' do
       background do
         fill_in 'Заголовок', with: ''

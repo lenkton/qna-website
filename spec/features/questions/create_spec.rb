@@ -14,14 +14,28 @@ feature 'Authenticated user can create question', %q(
       click_on 'Задать вопрос'
     end
 
-    scenario 'asks a question' do
-      fill_in 'Заголовок', with: 'Test question'
-      fill_in 'Содержание', with: 'text text text'
-      click_on 'Задать вопрос'
+    describe 'asks a valid question' do
+      background do
+        fill_in 'Заголовок', with: 'Test question'
+        fill_in 'Содержание', with: 'text text text'
+      end
 
-      expect(page).to have_content 'Вопрос был успешно создан!'
-      expect(page).to have_content 'Test question'
-      expect(page).to have_content 'text text text'
+      scenario 'asks a plain question' do
+        click_on 'Задать вопрос'
+
+        expect(page).to have_content 'Вопрос был успешно создан!'
+        expect(page).to have_content 'Test question'
+        expect(page).to have_content 'text text text'
+      end
+
+      scenario 'asks a question with files' do
+        attach_file 'Прикреплённые файлы', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+
+        click_on 'Задать вопрос'
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
     end
 
     scenario 'asks a question with errors' do
