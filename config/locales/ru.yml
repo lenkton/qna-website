@@ -34,6 +34,10 @@ ru:
       files: Прикреплённые файлы
     new:
       answer_to: "Создание ответа к вопросу: \"%{title}\""
+  links:
+    form:
+      name: Название ссылки
+      url: Адрес
   shared:
     errors:
       header: "Обнаружены ошибки:"
@@ -54,6 +58,7 @@ ru:
       body: Содержание
       create_question: Задать вопрос
       files: Прикреплённые файлы
+      links: Ссылки
       title: Заголовок
     index:
       create_question: Задать вопрос

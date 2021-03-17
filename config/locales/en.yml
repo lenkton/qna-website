@@ -65,6 +65,10 @@ en:
       files: Attached files
     new:
       answer_to: "Create an answer to the question: \"%{title}\""
+  links:
+    form:
+      name: Link name
+      url: URL
   shared:
     errors:
       header: "Errors detected:"
@@ -86,6 +90,7 @@ en:
       body: Body
       create_question: Ask the question
       files: Attached files
+      links: Links
       title: Title
     index:
       create_question: Ask a question

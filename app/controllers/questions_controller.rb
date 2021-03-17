@@ -3,10 +3,18 @@ class QuestionsController < ApplicationController
 
   expose :question, scope: -> { Question.with_attached_files }
   expose :questions, -> { Question.all }
-  expose :answers, -> { question.answers }
+  expose :answers, -> { question.answers.filter(&:persisted?) }
   expose :answer,
          scope: -> { question.answers },
          id: -> { params[:answer_id] }
+
+  def new
+    question.links.new
+  end
+
+  def show
+    answer.links.new
+  end
 
   def create
     if current_user.questions << question
@@ -44,6 +52,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, links_attributes: %i[name url])
   end
 end

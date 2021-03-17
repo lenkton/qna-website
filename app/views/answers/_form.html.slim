@@ -7,4 +7,10 @@
   = form.file_field :files, multiple: true, direct_upload: true
 
 .field
+  h3 = t('.links')
+  = form.fields_for :links do |links_form|
+    = render 'links/form', form: links_form
+
+.field
   = form.submit (submit_text ||= t('.create_answer'))
+
