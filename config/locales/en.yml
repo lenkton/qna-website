@@ -61,6 +61,7 @@ en:
     destroy:
       success: The answer was deleted successfully!
     form:
+      add_link: Add link
       body: Body
       files: Attached files
     new:

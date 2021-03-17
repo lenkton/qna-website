@@ -19,8 +19,18 @@ feature 'User can add links to an answer', %q(
     fill_in 'Название ссылки', with: 'My gist'
     fill_in 'Адрес', with: gist_url
 
+    click_on 'Добавить ссылку'
+
+    within '.nested-fields:nth-of-type(2)' do
+      fill_in 'Название ссылки', with: 'GH'
+      fill_in 'Адрес', with: random_url
+    end
+
     click_on 'Ответить'
 
-    within('#answers') { expect(page).to have_link('My gist', href: gist_url) }
+    within '#answers' do
+      expect(page).to have_link('My gist', href: gist_url)
+      expect(page).to have_link('GH', href: random_url)
+    end
   end
 end

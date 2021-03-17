@@ -30,6 +30,7 @@ ru:
     destroy:
       success: Ответ был успешно удалён!
     form:
+      add_link: Добавить ссылку
       body: Содержание
       files: Прикреплённые файлы
     new:

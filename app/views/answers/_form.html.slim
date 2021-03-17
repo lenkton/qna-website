@@ -10,6 +10,8 @@
   h3 = t('.links')
   = form.fields_for :links do |links_form|
     = render 'links/fields', form: links_form
+  .actions
+    = link_to_add_association t('.add_link'), form, :links, partial: 'links/fields', form_name: :form
 
 .field
   = form.submit (submit_text ||= t('.create_answer'))
