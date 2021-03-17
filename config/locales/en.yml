@@ -66,8 +66,9 @@ en:
     new:
       answer_to: "Create an answer to the question: \"%{title}\""
   links:
-    form:
+    fields:
       name: Link name
+      remove_link: Remove link
       url: URL
   shared:
     errors:
@@ -87,6 +88,7 @@ en:
     errors:
       not_in_answers: is not an answer of the question
     form:
+      add_link: Add link
       body: Body
       create_question: Ask the question
       files: Attached files

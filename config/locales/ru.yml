@@ -35,8 +35,9 @@ ru:
     new:
       answer_to: "Создание ответа к вопросу: \"%{title}\""
   links:
-    form:
+    fields:
       name: Название ссылки
+      remove_link: Удалить ссылку
       url: Адрес
   shared:
     errors:
@@ -55,6 +56,7 @@ ru:
     errors:
       not_in_answers: не является ответом на этот вопрос
     form:
+      add_link: Добавить ссылку
       body: Содержание
       create_question: Задать вопрос
       files: Прикреплённые файлы
