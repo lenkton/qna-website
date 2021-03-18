@@ -17,22 +17,30 @@ feature 'User can add links to an answer', %q(
     fill_in 'Новый ответ', with: 'text text text'
   end
 
-  scenario 'User adds link when asks an answer', js: true do
-    fill_in 'Название ссылки', with: 'My gist'
-    fill_in 'Адрес', with: gist_url
+  describe 'User adds link when asks an answer', js: true do
+    background do
+      fill_in 'Название ссылки', with: 'My gist'
+      fill_in 'Адрес', with: gist_url
 
-    click_on 'Добавить ссылку'
+      click_on 'Добавить ссылку'
 
-    within '.nested-fields:nth-of-type(2)' do
-      fill_in 'Название ссылки', with: 'GH'
-      fill_in 'Адрес', with: random_url
+      within '.nested-fields:nth-of-type(2)' do
+        fill_in 'Название ссылки', with: 'GH'
+        fill_in 'Адрес', with: random_url
+      end
+
+      click_on 'Ответить'
     end
 
-    click_on 'Ответить'
+    scenario 'adds several links' do
+      within '#answers' do
+        expect(page).to have_link('My gist', href: gist_url)
+        expect(page).to have_link('GH', href: random_url)
+      end
+    end
 
-    within '#answers' do
-      expect(page).to have_link('My gist', href: gist_url)
-      expect(page).to have_link('GH', href: random_url)
+    scenario 'one of the links is a gist' do
+      expect(page).to have_content 'nanna'
     end
   end
 

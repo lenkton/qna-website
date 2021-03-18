@@ -1,1 +1,8 @@
-li = link_to link.name, link.url
+li
+  = link_to link.name, link.url
+  - if link.url =~ /\Ahttps:\/\/gist.github.com\//
+    .gist
+      dl
+        - gist_files(link.url).each do |filename, hash|
+          dt = filename
+          dd = hash[:content]

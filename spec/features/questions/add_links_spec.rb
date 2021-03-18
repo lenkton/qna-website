@@ -17,21 +17,29 @@ feature 'User can add links to a question', %q(
     fill_in 'Содержание', with: 'text text text'
   end
 
-  scenario 'User adds links when asks a question', js: true do
-    fill_in 'Название ссылки', with: 'My gist'
-    fill_in 'Адрес', with: gist_url
+  describe 'User adds links when asks a question', js: true do
+    background do
+      fill_in 'Название ссылки', with: 'My gist'
+      fill_in 'Адрес', with: gist_url
 
-    click_on 'Добавить ссылку'
+      click_on 'Добавить ссылку'
 
-    within '.nested-fields:nth-of-type(2)' do
-      fill_in 'Название ссылки', with: 'GH'
-      fill_in 'Адрес', with: random_url
+      within '.nested-fields:nth-of-type(2)' do
+        fill_in 'Название ссылки', with: 'GH'
+        fill_in 'Адрес', with: random_url
+      end
+
+      click_on 'Задать вопрос'
     end
 
-    click_on 'Задать вопрос'
+    scenario 'adds several links' do
+      expect(page).to have_link('My gist', href: gist_url)
+      expect(page).to have_link('GH', href: random_url)
+    end
 
-    expect(page).to have_link('My gist', href: gist_url)
-    expect(page).to have_link('GH', href: random_url)
+    scenario 'one of the links is a gist' do
+      expect(page).to have_content 'nanna'
+    end
   end
 
   scenario 'User adds a link with incorrect URL', js: true do
