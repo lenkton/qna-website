@@ -9,13 +9,15 @@ feature 'User can add links to a question', %q(
   given(:gist_url) { 'https://gist.github.com/lenkton/99b9323cc3f01e1d4931486bd65195c4' }
   given(:random_url) { 'https://github.com' }
 
-  scenario 'User adds links when asks a question', js: true do
+  background do
     log_in author
     visit new_question_path
 
     fill_in 'Заголовок', with: 'Title'
     fill_in 'Содержание', with: 'text text text'
+  end
 
+  scenario 'User adds links when asks a question', js: true do
     fill_in 'Название ссылки', with: 'My gist'
     fill_in 'Адрес', with: gist_url
 
@@ -30,5 +32,15 @@ feature 'User can add links to a question', %q(
 
     expect(page).to have_link('My gist', href: gist_url)
     expect(page).to have_link('GH', href: random_url)
+  end
+
+  scenario 'User adds a link with incorrect URL', js: true do
+    fill_in 'Название ссылки', with: 'My gist'
+    fill_in 'Адрес', with: 'not_a_url'
+
+    click_on 'Добавить ссылку'
+
+    expect(page).not_to have_link('My gist')
+    expect(current_path).to eq new_question_path
   end
 end
