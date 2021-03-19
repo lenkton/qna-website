@@ -82,6 +82,55 @@ feature 'User can edit his/her answer', %q(
       end
     end
 
+    describe 'add links' do
+      given(:gist_url) { 'https://gist.github.com/lenkton/99b9323cc3f01e1d4931486bd65195c4' }
+      given(:random_url) { 'https://github.com' }
+
+      describe 'Correct links', js: true do
+        background do
+          within "#answer-#{answer.id}-edit-form" do
+            click_on 'Добавить ссылку'
+
+            fill_in 'Название ссылки', with: 'My gist'
+            fill_in 'Адрес', with: gist_url
+
+            click_on 'Добавить ссылку'
+
+            within '.nested-fields:nth-of-type(2)' do
+              fill_in 'Название ссылки', with: 'GH'
+              fill_in 'Адрес', with: random_url
+            end
+
+            click_on 'Сохранить'
+          end
+        end
+
+        scenario 'adds several links' do
+          within "#answer-#{answer.id}" do
+            expect(page).to have_link('My gist', href: gist_url)
+            expect(page).to have_link('GH', href: random_url)
+          end
+        end
+
+        scenario 'one of the links is a gist' do
+          within("#answer-#{answer.id}") { expect(page).to have_content 'nanna' }
+        end
+      end
+
+      scenario 'User adds a link with incorrect URL', js: true do
+        within "#answer-#{answer.id}-edit-form" do
+          click_on 'Добавить ссылку'
+
+          fill_in 'Название ссылки', with: 'My gist'
+          fill_in 'Адрес', with: 'not_a_url'
+
+          click_on 'Сохранить'
+        end
+
+        expect(page).not_to have_link('My gist')
+      end
+    end
+
     describe 'with errors' do
       background do
         within '#answers' do

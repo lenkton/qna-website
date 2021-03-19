@@ -7,7 +7,9 @@
   answerBody.classList.remove('hidden')
   answerBody.innerHTML = '<%= j answer.body %>'
   
-  document.getElementById('answer-' + <%= answer.id %> + '-files').innerHTML = '<%= render collection: answer.files, partial: "shared/file", locals: { resource: answer } %>'
+  document.getElementById('answer-' + <%= answer.id %> + '-files').innerHTML = '<%= render collection: answer.files, partial: "shared/file" %>'
+  document.getElementById('answer-' + <%= answer.id %> + '-links').innerHTML = '<%= render answer.links %>'
+
   document.getElementById('edit_' + <%= answer.id %> + '_answer_files').value = ''
   document.getElementById('edit_' + <%= answer.id %> + '_answer_files').disabled = false
 <% end %>
