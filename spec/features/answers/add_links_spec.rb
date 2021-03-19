@@ -48,7 +48,7 @@ feature 'User can add links to an answer', %q(
     fill_in 'Название ссылки', with: 'My gist'
     fill_in 'Адрес', with: 'not_a_url'
 
-    click_on 'Добавить ссылку'
+    click_on 'Ответить'
 
     within '#answers' do
       expect(page).not_to have_link('My gist')

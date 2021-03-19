@@ -46,7 +46,7 @@ feature 'User can add links to a question', %q(
     fill_in 'Название ссылки', with: 'My gist'
     fill_in 'Адрес', with: 'not_a_url'
 
-    click_on 'Добавить ссылку'
+    click_on 'Задать вопрос'
 
     expect(page).not_to have_link('My gist')
     expect(current_path).to eq new_question_path
