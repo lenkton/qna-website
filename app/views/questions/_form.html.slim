@@ -19,5 +19,10 @@
   .actions
     = link_to_add_association t('.add_link'), form, :links, partial: 'links/fields', form_name: :form
 
+.field.reward-field
+  h3 = t('.reward')
+  = form.fields_for :reward do |reward_form|
+    = render 'rewards/fields', form: reward_form
+
 .field
   = form.submit (submit_text ||= t('.create_question'))

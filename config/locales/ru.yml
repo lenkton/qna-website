@@ -43,6 +43,10 @@ ru:
     link:
       confirmation: Вы уверены?
       delete: Удалить
+  rewards:
+    fields:
+      name: Название
+      image: Изображение
   shared:
     errors:
       header: "Обнаружены ошибки:"
@@ -65,6 +69,7 @@ ru:
       create_question: Задать вопрос
       files: Прикреплённые файлы
       links: Ссылки
+      reward: Награда за лучший ответ
       title: Заголовок
     index:
       create_question: Задать вопрос

@@ -97,6 +97,7 @@ en:
       create_question: Ask the question
       files: Attached files
       links: Links
+      reward: Best answer reward
       title: Title
     index:
       create_question: Ask a question
