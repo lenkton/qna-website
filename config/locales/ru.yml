@@ -40,6 +40,9 @@ ru:
       name: Название ссылки
       remove_link: Удалить ссылку
       url: Адрес
+    link:
+      confirmation: Вы уверены?
+      delete: Удалить
   shared:
     errors:
       header: "Обнаружены ошибки:"

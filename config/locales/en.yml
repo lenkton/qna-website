@@ -71,6 +71,9 @@ en:
       name: Link name
       remove_link: Remove link
       url: URL
+    link:
+      confirmation: Are you sure?
+      delete: Delete
   shared:
     errors:
       header: "Errors detected:"
