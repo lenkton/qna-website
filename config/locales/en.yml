@@ -74,6 +74,12 @@ en:
     link:
       confirmation: Are you sure?
       delete: Delete
+  rewards:
+    fields:
+      name: Name
+      image: Image
+    index:
+      your_rewards: Your rewards
   shared:
     errors:
       header: "Errors detected:"

@@ -25,5 +25,9 @@ FactoryBot.define do
         question.reload
       end
     end
+
+    factory :question_with_reward do
+      reward { build :reward }
+    end
   end
 end

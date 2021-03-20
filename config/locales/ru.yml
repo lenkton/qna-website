@@ -47,6 +47,8 @@ ru:
     fields:
       name: Название
       image: Изображение
+    index:
+      your_rewards: Ваши награды
   shared:
     errors:
       header: "Обнаружены ошибки:"
