@@ -125,7 +125,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #set_best_answer' do
-    let!(:question) { create(:question, author: author) }
+    let!(:question) { create(:question, author: author, reward: build(:reward)) }
     let!(:answer) { create(:answer, question: question) }
 
     context 'Author' do
@@ -141,6 +141,10 @@ RSpec.describe QuestionsController, type: :controller do
 
         it 'renders set_best_answer template' do
           expect(response).to render_template :set_best_answer
+        end
+
+        it 'grants a reward to the author of the best answer' do
+          expect(answer.author.rewards).to include(question.reward)
         end
       end
 

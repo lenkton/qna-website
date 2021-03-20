@@ -6,5 +6,9 @@ FactoryBot.define do
   factory :reward do
     question
     name { generate(:reward_name) }
+
+    after(:build) do |reward, evaluator|
+      reward.image.attach(io: File.open('Gemfile'), filename: 'Gemfile')
+    end
   end
 end

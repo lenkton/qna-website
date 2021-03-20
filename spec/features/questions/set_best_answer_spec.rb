@@ -7,7 +7,7 @@ feature 'The author of a question can choose the best answer to it', %q(
 ) do
   given(:author) { create(:author) }
   given(:random_user) { create(:user) }
-  given!(:question) { create(:question, author: author) }
+  given!(:question) { create(:question, author: author, reward: build(:reward)) }
   given!(:answers) { create_list(:answer, ANSWERS_DEFAULT_LIST_SIZE, question: question) }
   given(:answer) { answers[3] }
   given(:other_answers) { answers - [answer] }
@@ -29,6 +29,10 @@ feature 'The author of a question can choose the best answer to it', %q(
       end
 
       expect(page.all(:css, '.answer').first).to have_content answer.body
+    end
+
+    scenario 'and the answer author gets a reward' do
+      expect(page).to have_content("#{answer.author.email} получил награду за лучший ответ!")
     end
 
     given(:another_answer) { other_answers[3] }

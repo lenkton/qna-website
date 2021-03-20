@@ -104,6 +104,8 @@ en:
       questions: Questions
     new:
       question_creation: Question creation
+    set_best_answer:
+      user_rewarded: "%{name} was rewarded for the best answer!"
     show:
       add_answer: Add an answer
       delete_question: Delete question

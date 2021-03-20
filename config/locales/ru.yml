@@ -76,6 +76,8 @@ ru:
       questions: Вопросы
     new:
       question_creation: Создание вопроса
+    set_best_answer:
+      user_rewarded: "%{name} получил награду за лучший ответ!"
     show:
       add_answer: Добавить ответ
       delete_question: Удалить вопрос
