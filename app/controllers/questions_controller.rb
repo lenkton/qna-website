@@ -43,11 +43,11 @@ class QuestionsController < ApplicationController
   end
 
   def set_best_answer
-    if current_user.author_of?(question) && question.update(best_answer_id: params[:answer_id])
-      rewarded_user = question.best_answer.author
-      rewarded_user.rewards << question.reward
-      flash[:notice] = (flash[:notice] || '') + I18n.t('questions.set_best_answer.user_rewarded', name: rewarded_user.email)
-    end
+    return unless current_user.author_of?(question)
+
+    answer.choose_best!
+    flash[:notice] = (flash[:notice] || '') + I18n.t('questions.set_best_answer.user_rewarded', name: answer.author.email)
+  rescue
   end
 
   private
