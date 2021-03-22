@@ -1,22 +1,29 @@
-li.answer id="answer-#{answer.id}"
-  p id="answer-#{answer.id}-body"
-    = answer.body
-  ul id="answer-#{answer.id}-files"
-    = render collection: answer.files, partial: 'shared/file'
-  - if current_user&.author_of?(answer)
-    =< link_to t('.destroy'), answer, method: :delete, remote: true, data: { confirm: t('.confirm') }
-    =< link_to t('.edit'), '#', class: 'edit-answer-button', data: { answer_id: answer.id }
-  .hidden id="answer-#{answer.id}-edit-form"
-    . id="answer-#{answer.id}-edit-errors"
-    = form_for answer, remote: true, namespace: "edit_#{answer.id}" do |form|
+li.answer id="answer-#{local_assigns[:answer].id}"
+  p id="answer-#{local_assigns[:answer].id}-body"
+    = local_assigns[:answer].body
+
+  ul id="answer-#{local_assigns[:answer].id}-files"
+    = render collection: local_assigns[:answer].files, partial: 'shared/file'
+
+  ul id="answer-#{local_assigns[:answer].id}-links"
+    = render local_assigns[:answer].links
+
+  - if current_user&.author_of?(local_assigns[:answer])
+    =< link_to t('.destroy'), local_assigns[:answer], method: :delete, remote: true, data: { confirm: t('.confirm') }
+    =< link_to t('.edit'), '#', class: 'edit-answer-button', data: { answer_id: local_assigns[:answer].id }
+
+  .hidden id="answer-#{local_assigns[:answer].id}-edit-form"
+    . id="answer-#{local_assigns[:answer].id}-edit-errors"
+    = form_for local_assigns[:answer], remote: true, namespace: "edit_#{local_assigns[:answer].id}" do |form|
       = render 'answers/form', form: form, submit_text: t('.save')
     = link_to t('actions.cancel'), 
-              '#', id: "answer-#{answer.id}-edit-cancel",
+              '#', id: "answer-#{local_assigns[:answer].id}-edit-cancel",
               class: 'edit-answer-cancel',
-              data: { answer_id: answer.id }
-  - if current_user&.author_of?(answer.question)
+              data: { answer_id: local_assigns[:answer].id }
+
+  - if current_user&.author_of?(local_assigns[:answer].question)
     =< button_to t('.mark_best_answer'),
                set_best_answer_question_path(question),
                method: :post,
                remote: true,
-               params: { answer_id: answer.id }
+               params: { answer_id: local_assigns[:answer].id }

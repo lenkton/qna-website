@@ -1,0 +1,12 @@
+li id="link-#{link.id}"
+  - if current_user&.author_of?(link.linkable)
+    .actions
+      = link_to t('.delete'), link_path(link), method: :delete, remote: true, data: { confirm: t('.confirmation') }
+
+  = link_to link.name, link.url
+  - if link.url =~ /\Ahttps:\/\/gist.github.com\//
+    .gist
+      dl
+        - gist_files(link.url).each do |filename, hash|
+          dt = filename
+          dd = hash[:content]

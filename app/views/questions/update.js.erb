@@ -8,6 +8,7 @@
   document.getElementById('question-title').innerHTML = '<%= j question.title %>'
   document.getElementById('question-body').innerHTML = '<%= j question.body %>'
   document.getElementById('question-files').innerHTML = '<%= render collection: question.files, partial: "shared/file", locals: { resource: question } %>'
+  document.getElementById('question-links').innerHTML = '<%= render question.links %>'
 
   document.getElementById('question_files').value = ''
   document.getElementById('question_files').disabled = false

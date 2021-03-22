@@ -1,0 +1,4 @@
+<% if !link.persisted? %>
+  if (link = document.getElementById('link-' + '<%= link.id %>'))
+    link.remove()
+<% end %>

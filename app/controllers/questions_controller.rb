@@ -3,10 +3,19 @@ class QuestionsController < ApplicationController
 
   expose :question, scope: -> { Question.with_attached_files }
   expose :questions, -> { Question.all }
-  expose :answers, -> { question.answers }
+  expose :answers, -> { question.answers.filter(&:persisted?) }
   expose :answer,
          scope: -> { question.answers },
          id: -> { params[:answer_id] }
+
+  def new
+    question.links.new
+    question.reward = Reward.new
+  end
+
+  def show
+    answer.links.new
+  end
 
   def create
     if current_user.questions << question
@@ -34,7 +43,11 @@ class QuestionsController < ApplicationController
   end
 
   def set_best_answer
-    question.update(best_answer_id: params[:answer_id]) if current_user.author_of?(question)
+    return unless current_user.author_of?(question)
+
+    answer.choose_best!
+    flash[:notice] = (flash[:notice] || '') + I18n.t('questions.set_best_answer.user_rewarded', name: answer.author.email)
+  rescue
   end
 
   private
@@ -44,6 +57,13 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params
+      .require(:question)
+      .permit(
+        :title,
+        :body,
+        links_attributes: %i[id name url _destroy],
+        reward_attributes: %i[id name image _destroy]
+      )
   end
 end

@@ -61,10 +61,25 @@ en:
     destroy:
       success: The answer was deleted successfully!
     form:
+      add_link: Add link
       body: Body
       files: Attached files
     new:
       answer_to: "Create an answer to the question: \"%{title}\""
+  links:
+    fields:
+      name: Link name
+      remove_link: Remove link
+      url: URL
+    link:
+      confirmation: Are you sure?
+      delete: Delete
+  rewards:
+    fields:
+      name: Name
+      image: Image
+    index:
+      your_rewards: Your rewards
   shared:
     errors:
       header: "Errors detected:"
@@ -83,15 +98,20 @@ en:
     errors:
       not_in_answers: is not an answer of the question
     form:
+      add_link: Add link
       body: Body
       create_question: Ask the question
       files: Attached files
+      links: Links
+      reward: Best answer reward
       title: Title
     index:
       create_question: Ask a question
       questions: Questions
     new:
       question_creation: Question creation
+    set_best_answer:
+      user_rewarded: "%{name} was rewarded for the best answer!"
     show:
       add_answer: Add an answer
       delete_question: Delete question

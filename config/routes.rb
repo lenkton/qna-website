@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   end
 
   resources :files, only: [:destroy]
+  resources :links, only: [:destroy]
+  resources :rewards, only: [:index]
 end
