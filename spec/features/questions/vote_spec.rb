@@ -36,6 +36,24 @@ feature 'An authenticated user can vote for and against a question', %q(
         scenario 'cannot vote again' do
           within('#question-rating') { expect(page).not_to have_link('За') }
         end
+
+        scenario 'cancels the decision' do
+          within('#question-rating') do
+            click_on 'Отменить'
+            expect(page).to have_content('0')
+          end
+        end
+
+        describe 'then' do
+          scenario 'votes for the question again' do
+            within '#question-rating' do
+              click_on 'Отменить'
+
+              click_on 'За'
+              expect(page).to have_content('1')
+            end
+          end
+        end
       end
     end
   end

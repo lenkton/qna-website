@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Vote, type: :model do
-  it { should belong_to(:user) }
+  it_behaves_like 'authorable'
+
   it { should belong_to(:question) }
 
-  it { should have_db_index(%i[user_id question_id]).unique(true) }
+  it { should have_db_index(%i[author_id question_id]).unique(true) }
 
   describe '::positive' do
     it "returns the scope of 'for' votes" do

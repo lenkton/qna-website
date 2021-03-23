@@ -1,3 +1,7 @@
+:not(.voted) > .vote-cancel {
+  display: none;
+}
+
 .voted .vote-actions {
   display: none;
 }

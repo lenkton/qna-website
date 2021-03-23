@@ -17,6 +17,11 @@
                     remote: true,
                     data: {type: :json},
                     params: { vote: { supportive: false } }
+      .vote-cancel
+        - if question.vote_of(current_user)&.persisted?
+          = link_to t('actions.cancel'), vote_path(question.vote_of(current_user)), method: :delete, remote: true, data: { type: :json }
+        - else
+          = link_to t('actions.cancel'), '#', method: :delete, remote: true, data: { type: :json }
 
   - if current_user&.author_of?(question)
     = link_to t('.delete_question'), question_path(question), method: :delete, data: { confirm: t('actions.destroy_confirmation') }

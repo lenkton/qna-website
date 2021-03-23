@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :vote do
-    user
+    author
     question
     supportive { true }
   end

@@ -1,5 +1,6 @@
 class Vote < ApplicationRecord
-  belongs_to :user
+  include Authorable
+
   belongs_to :question
 
   scope :positive, -> { where(supportive: true) }

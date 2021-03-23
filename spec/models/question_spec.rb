@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
+  it_behaves_like 'authorable'
+
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:links).dependent(:destroy) }
   it { should have_many(:votes).dependent(:destroy) }
   it { should have_one(:reward).dependent(:destroy) }
   it { should belong_to(:best_answer).optional }
-
-  it { should belong_to :author }
 
   it 'has many attached files' do
     expect(Question.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
@@ -31,20 +31,20 @@ RSpec.describe Question, type: :model do
     end
   end
 
-  describe '#vote_of(user)' do
-    let(:user) { create :user }
+  describe '#vote_of(author)' do
+    let(:author) { create :author }
 
     context 'the Vote exists' do
-      let!(:vote) { create :vote, user: user }
+      let!(:vote) { create :vote, author: author }
 
-      it 'returns the Vote of the specified user for/against the quesiton' do
-        expect(vote.question.vote_of(user)).to eq vote
+      it 'returns the Vote of the specified author for/against the quesiton' do
+        expect(vote.question.vote_of(author)).to eq vote
       end
     end
 
     context 'the Vote does not exist' do
       it 'returns nil' do
-        expect(Question.new.vote_of(user)).to be_nil
+        expect(Question.new.vote_of(author)).to be_nil
       end
     end
   end

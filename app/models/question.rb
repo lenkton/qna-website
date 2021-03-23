@@ -1,11 +1,12 @@
 class Question < ApplicationRecord
+  include Authorable
+
   has_many :answers, dependent: :destroy
   has_many :links, dependent: :destroy, as: :linkable
   has_many :votes, dependent: :destroy
   has_one :reward, dependent: :destroy
 
   belongs_to :best_answer, class_name: 'Answer', optional: true
-  belongs_to :author, class_name: 'User'
 
   has_many_attached :files
 
@@ -19,7 +20,7 @@ class Question < ApplicationRecord
   end
 
   def vote_of(user)
-    votes.find_by(user_id: user)
+    votes.find_by(author_id: user)
   end
 
   private
