@@ -28,7 +28,7 @@ feature 'User can edit his/her question', %q(
         expect(page).not_to have_content('old title')
         expect(page).not_to have_content('old body')
         expect(page).not_to have_selector('textarea')
-        expect(page).not_to have_selector('input')
+        expect(page).not_to have_selector('.field input')
       end
     end
 
@@ -151,7 +151,7 @@ feature 'User can edit his/her question', %q(
           expect(page).not_to have_content('old title')
           expect(page).not_to have_content('old body')
           expect(page).not_to have_selector('textarea')
-          expect(page).not_to have_selector('input')
+          expect(page).not_to have_selector('.field input')
         end
 
         click_on 'Редактировать вопрос'

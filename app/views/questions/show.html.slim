@@ -1,6 +1,23 @@
 #question
   h1#question-title = question.title
 
+  #question-rating class=('voted' if question.vote_of(current_user)&.persisted?)
+    .rating-value = question.rating
+    - if user_signed_in?
+      .vote-actions
+        =< button_to t('votes.for'),
+                    question_votes_path(question),
+                    method: :post,
+                    remote: true,
+                    data: {type: :json},
+                    params: { vote: { supportive: true } }
+        =< button_to t('votes.against'),
+                    question_votes_path(question),
+                    method: :post,
+                    remote: true,
+                    data: {type: :json},
+                    params: { vote: { supportive: false } }
+
   - if current_user&.author_of?(question)
     = link_to t('.delete_question'), question_path(question), method: :delete, data: { confirm: t('actions.destroy_confirmation') }
     = link_to t('.edit_question'), '#', id: 'question-edit-button'

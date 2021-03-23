@@ -10,6 +10,7 @@ import "channels"
 require("jquery")
 require("@nathanvda/cocoon")
 import "questions/showEditForm"
+import "questions/votingHandler"
 import "answers/showEditForm"
 
 Rails.start()
