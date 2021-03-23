@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :vote do
     author
-    question
+    votable { association :question }
     supportive { true }
   end
 end

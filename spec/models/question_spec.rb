@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Question, type: :model do
   it_behaves_like 'authorable'
+  it_behaves_like 'votable'
 
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:links).dependent(:destroy) }
-  it { should have_many(:votes).dependent(:destroy) }
   it { should have_one(:reward).dependent(:destroy) }
   it { should belong_to(:best_answer).optional }
 
@@ -19,33 +19,5 @@ RSpec.describe Question, type: :model do
   it { should validate_presence_of :body }
   it 'validates that the best answer is present among the answers' do
     expect(build(:question, best_answer: create(:answer))).to_not be_valid
-  end
-
-  describe '#rating' do
-    let(:question) { create :question }
-    let!(:votes_for) { create_list :vote, 5, question: question, supportive: true }
-    let!(:votes_against) { create_list :vote, 2, question: question, supportive: false }
-
-    it 'returns the number of votes for minus the number of votes against the question' do
-      expect(question.rating).to eq(votes_for.count - votes_against.count)
-    end
-  end
-
-  describe '#vote_of(author)' do
-    let(:author) { create :author }
-
-    context 'the Vote exists' do
-      let!(:vote) { create :vote, author: author }
-
-      it 'returns the Vote of the specified author for/against the quesiton' do
-        expect(vote.question.vote_of(author)).to eq vote
-      end
-    end
-
-    context 'the Vote does not exist' do
-      it 'returns nil' do
-        expect(Question.new.vote_of(author)).to be_nil
-      end
-    end
   end
 end
