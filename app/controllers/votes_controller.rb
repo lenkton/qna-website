@@ -1,16 +1,16 @@
 class VotesController < ApplicationController
   before_action :authenticate_user!, only: %i[create destroy]
 
-  expose :question, id: -> { params[:question_id] || Vote.find(params[:id]).question_id }
-  expose :vote, scope: -> { question.votes },
+  expose :votable, -> { Vote.find_by(id: params[:id])&.votable || find_votable }
+  expose :vote, scope: -> { votable.votes },
                 build_params: -> { { author: current_user }.merge(vote_params) }
 
   def create
     respond_to do |format|
       vote.save
-      format.json { render json: { question: { vote: { status: :created, supportive: vote.supportive, id: vote.id } } } }
+      format.json { render json: { votable_sym => { vote: { status: :created, supportive: vote.supportive, id: vote.id } } } }
     rescue
-      format.json { render json: vote.errors.full_messages, status: :unprocessable_entity }
+      format.json { head :unprocessable_entity }
     end
   end
 
@@ -18,7 +18,7 @@ class VotesController < ApplicationController
     respond_to do |format|
       if current_user.author_of?(vote)
         vote.destroy
-        format.json { render json: { question: { vote: { status: :deleted, previous_value: vote.supportive } } } }
+        format.json { render json: { votable_sym => { vote: { status: :deleted, previous_value: vote.supportive } } } }
       else
         format.json { head :unauthorized }
       end
@@ -27,7 +27,23 @@ class VotesController < ApplicationController
 
   private
 
+  def votable_sym
+    votable.class.name.underscore.to_sym
+  end
+
   def vote_params
     params.require(:vote).permit(:supportive)
+  end
+
+  def find_votable
+    votable_name.to_s.classify.constantize.find(params[votable_id_sym])
+  end
+
+  def votable_name
+    params[:votable]
+  end
+
+  def votable_id_sym
+    (votable_name.to_s.singularize + '_id').to_sym
   end
 end
