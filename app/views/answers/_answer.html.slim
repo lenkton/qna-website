@@ -1,7 +1,7 @@
 li.answer id="answer-#{local_assigns[:answer].id}"
   .rating id="answer-#{answer.id}-rating" class=('voted' if answer.vote_of(current_user)&.persisted?)
     .rating-value = answer.rating
-    - if user_signed_in?
+    - if user_signed_in? && !current_user.author_of?(answer)
       .vote-actions
         =< button_to t('votes.for'),
                     answer_votes_path(answer),

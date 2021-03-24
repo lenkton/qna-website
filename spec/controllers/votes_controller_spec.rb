@@ -35,6 +35,19 @@ RSpec.shared_examples 'votes controller with a specific votable' do |votable_typ
         end
       end
 
+      context 'Votes for himself/herself' do
+        let(:own_votable) { create votable_type, author: author }
+
+        it 'does not create a vote' do
+          expect { post :create, params: { vote: { supportive: true }, id_field_name_sym => own_votable, votable: votable_plural_sym }, format: :json }.not_to change(own_votable.votes, :count)
+        end
+
+        it 'responces with an error' do
+          post :create, params: { vote: { supportive: true }, id_field_name_sym => own_votable, votable: votable_plural_sym }, format: :json
+          expect(response).to be_forbidden
+        end
+      end
+
       context 'invalid params' do
         it 'does not create a vote' do
           expect { post :create, params: { vote: { supportive: nil }, id_field_name_sym => votable }, format: :json }.not_to change(Vote, :count)

@@ -5,11 +5,11 @@ feature 'An authenticated user can vote for and against a question', %q(
   As an authenticated user
   I'd like to be able to vote for and against questions
 ) do
+  given(:user) { create :user }
   given!(:question) { create(:question) }
+  given(:own_question) { create :question, author: user }
 
   describe 'Authenticated user', js: true do
-    given(:user) { create :user }
-
     background do
       log_in user
       visit question_path(question)
@@ -34,7 +34,7 @@ feature 'An authenticated user can vote for and against a question', %q(
 
       describe 'then' do
         scenario 'cannot vote again' do
-          within('#question-rating') { expect(page).not_to have_link('За') }
+          within('#question-rating') { expect(page).not_to have_button('За') }
         end
 
         scenario 'cancels the decision' do
@@ -58,10 +58,18 @@ feature 'An authenticated user can vote for and against a question', %q(
     end
   end
 
+  scenario 'User cannot rate his/her question' do
+    log_in user
+    visit(question_path(own_question))
+
+    expect(page).not_to have_button('За')
+    expect(page).not_to have_button('Против')
+  end
+
   scenario 'Unauthenticated user cannot vote' do
     visit(question_path(question))
 
-    expect(page).not_to have_link('За')
-    expect(page).not_to have_link('Против')
+    expect(page).not_to have_button('За')
+    expect(page).not_to have_button('Против')
   end
 end

@@ -7,8 +7,12 @@ class VotesController < ApplicationController
 
   def create
     respond_to do |format|
-      vote.save
-      format.json { render json: { votable_sym => { vote: { status: :created, supportive: vote.supportive, id: vote.id } } } }
+      if current_user.author_of?(votable)
+        format.json { head :forbidden }
+      else
+        vote.save
+        format.json { render json: { votable_sym => { vote: { status: :created, supportive: vote.supportive, id: vote.id } } } }
+      end
     rescue
       format.json { head :unprocessable_entity }
     end

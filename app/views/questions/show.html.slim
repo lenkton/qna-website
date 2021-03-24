@@ -3,7 +3,7 @@
 
   #question-rating class=('voted' if question.vote_of(current_user)&.persisted?)
     .rating-value = question.rating
-    - if user_signed_in?
+    - if user_signed_in? && !current_user.author_of?(question)
       .vote-actions
         =< button_to t('votes.for'),
                     question_votes_path(question),

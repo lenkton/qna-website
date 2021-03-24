@@ -7,6 +7,13 @@ RSpec.describe Vote, type: :model do
 
   it { should have_db_index(%i[author_id votable_id votable_type]).unique(true) }
 
+  let(:author) { create :author }
+  let(:question) { create :question, author: author }
+
+  it 'validates that the author of a votable does not vote for himeself/herself' do
+    expect(Vote.new(votable: question, author: author)).not_to be_valid
+  end
+
   describe '::positive' do
     it "returns the scope of 'for' votes" do
       expect(Vote.positive).to eq Vote.where(supportive: true)
