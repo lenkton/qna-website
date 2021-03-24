@@ -1,4 +1,26 @@
 li.answer id="answer-#{local_assigns[:answer].id}"
+  .rating id="answer-#{answer.id}-rating" class=('voted' if answer.vote_of(current_user)&.persisted?)
+    .rating-value = answer.rating
+    - if user_signed_in?
+      .vote-actions
+        =< button_to t('votes.for'),
+                    answer_votes_path(answer),
+                    method: :post,
+                    remote: true,
+                    data: { type: :json, votable: :answers },
+                    params: { vote: { supportive: true } }
+        =< button_to t('votes.against'),
+                    answer_votes_path(answer),
+                    method: :post,
+                    remote: true,
+                    data: { type: :json, votable: :answers },
+                    params: { vote: { supportive: false } }
+      .vote-cancel
+        - if answer.vote_of(current_user)&.persisted?
+          = link_to t('actions.cancel'), vote_path(answer.vote_of(current_user)), method: :delete, remote: true, data: { type: :json }
+        - else
+          = link_to t('actions.cancel'), '#', method: :delete, remote: true, data: { type: :json }
+
   p id="answer-#{local_assigns[:answer].id}-body"
     = local_assigns[:answer].body
 
