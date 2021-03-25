@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-RSpec.shared_examples 'votes controller with a specific votable' do |votable_type|
+RSpec.describe VotesController, type: :controller do
+  let(:votable_type) { :answer }
   let(:author) { create :author }
   let(:votable) { create votable_type }
   let(:votable_plural_sym) { votable_type.to_s.pluralize.to_sym }
@@ -84,20 +85,15 @@ RSpec.shared_examples 'votes controller with a specific votable' do |votable_typ
         expect { delete :destroy, params: { id: vote, votable: votable_plural_sym }, format: :json }.not_to change(vote.votable.votes, :count)
       end
 
+
+      it 'does not destroy the vote' do
+        expect { delete :destroy, params: { id: vote, votable: votable_plural_sym }, format: :json }.not_to change(vote.votable.votes, :count)
+      end
+
       it 'returns an unauthorized error response' do
         delete :destroy, params: { id: vote, votable: votable_plural_sym }, format: :json
         expect(response).to be_unauthorized
       end
     end
-  end
-end
-
-RSpec.describe VotesController, type: :controller do
-  context 'votable is a question' do
-    it_behaves_like 'votes controller with a specific votable', :question
-  end
-
-  context 'votable is an answer' do
-    it_behaves_like 'votes controller with a specific votable', :answer
   end
 end
