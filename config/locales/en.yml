@@ -90,6 +90,9 @@ en:
       sign_in: Sign in
       sign_out: Sign out
   hello: "Hello world"
+  votes:
+    against: Against
+    for: For
   questions:
     create:
       success: The question has been successfully created!

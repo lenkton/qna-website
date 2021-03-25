@@ -1,6 +1,8 @@
 class Answer < ApplicationRecord
+  include Authorable
+  include Votable
+
   belongs_to :question
-  belongs_to :author, class_name: 'User'
   has_many :links, dependent: :destroy, as: :linkable
 
   has_many_attached :files

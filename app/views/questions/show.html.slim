@@ -1,6 +1,8 @@
 #question
   h1#question-title = question.title
 
+  = render 'shared/rating', resource: question, id: "question-rating"
+
   - if current_user&.author_of?(question)
     = link_to t('.delete_question'), question_path(question), method: :delete, data: { confirm: t('actions.destroy_confirmation') }
     = link_to t('.edit_question'), '#', id: 'question-edit-button'

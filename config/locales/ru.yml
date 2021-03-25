@@ -58,6 +58,9 @@ ru:
     header:
       sign_in: Войти
       sign_out: Выйти
+  votes:
+    against: Против
+    for: За
   questions:
     create:
       success: Вопрос был успешно создан!

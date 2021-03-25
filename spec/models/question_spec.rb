@@ -1,12 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
+  it_behaves_like 'authorable'
+  it_behaves_like 'votable'
+
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:links).dependent(:destroy) }
   it { should have_one(:reward).dependent(:destroy) }
   it { should belong_to(:best_answer).optional }
-
-  it { should belong_to :author }
 
   it 'has many attached files' do
     expect(Question.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
