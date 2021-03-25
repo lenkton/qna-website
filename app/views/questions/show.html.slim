@@ -1,27 +1,7 @@
 #question
   h1#question-title = question.title
 
-  #question-rating class=('voted' if question.vote_of(current_user)&.persisted?)
-    .rating-value = question.rating
-    - if user_signed_in? && !current_user.author_of?(question)
-      .vote-actions
-        =< button_to t('votes.for'),
-                    question_votes_path(question),
-                    method: :post,
-                    remote: true,
-                    data: { type: :json, votable: :questions },
-                    params: { vote: { value: 1 } }
-        =< button_to t('votes.against'),
-                    question_votes_path(question),
-                    method: :post,
-                    remote: true,
-                    data: { type: :json, votable: :questions },
-                    params: { vote: { value: -1 } }
-      .vote-cancel
-        - if question.vote_of(current_user)&.persisted?
-          = link_to t('actions.cancel'), vote_path(question.vote_of(current_user)), method: :delete, remote: true, data: { type: :json }
-        - else
-          = link_to t('actions.cancel'), '#', method: :delete, remote: true, data: { type: :json }
+  = render 'shared/rating', resource: question, id: "question-rating"
 
   - if current_user&.author_of?(question)
     = link_to t('.delete_question'), question_path(question), method: :delete, data: { confirm: t('actions.destroy_confirmation') }
