@@ -3,10 +3,11 @@ class Vote < ApplicationRecord
 
   belongs_to :votable, polymorphic: true
 
-  scope :positive, -> { where(supportive: true) }
-  scope :negative, -> { where(supportive: false) }
-
+  validates :value, inclusion: { in: [1, -1] }
   validate :validate_self_voting
+
+  scope :positive, -> { where('value > 0') }
+  scope :negative, -> { where('value < 0') }
 
   private
 

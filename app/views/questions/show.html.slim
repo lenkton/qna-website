@@ -10,13 +10,13 @@
                     method: :post,
                     remote: true,
                     data: { type: :json, votable: :questions },
-                    params: { vote: { supportive: true } }
+                    params: { vote: { value: 1 } }
         =< button_to t('votes.against'),
                     question_votes_path(question),
                     method: :post,
                     remote: true,
                     data: { type: :json, votable: :questions },
-                    params: { vote: { supportive: false } }
+                    params: { vote: { value: -1 } }
       .vote-cancel
         - if question.vote_of(current_user)&.persisted?
           = link_to t('actions.cancel'), vote_path(question.vote_of(current_user)), method: :delete, remote: true, data: { type: :json }

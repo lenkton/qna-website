@@ -7,6 +7,8 @@ RSpec.describe Vote, type: :model do
 
   it { should have_db_index(%i[author_id votable_id votable_type]).unique(true) }
 
+  it { should validate_inclusion_of(:value).in_array([1, -1]) }
+
   let(:author) { create :author }
   let(:question) { create :question, author: author }
 
@@ -14,15 +16,20 @@ RSpec.describe Vote, type: :model do
     expect(Vote.new(votable: question, author: author)).not_to be_valid
   end
 
-  describe '::positive' do
-    it "returns the scope of 'for' votes" do
-      expect(Vote.positive).to eq Vote.where(supportive: true)
-    end
-  end
+  describe 'scopes' do
+    let!(:positive_votes) { create_list :vote, 5, value: 1 }
+    let!(:negative_votes) { create_list :vote, 2, value: -1 }
 
-  describe '::negative' do
-    it "returns the scope of 'against' votes" do
-      expect(Vote.negative).to eq Vote.where(supportive: false)
+    describe '::positive' do
+      it "returns the scope of 'for' votes" do
+        expect(Vote.positive).to eq Vote.where('value > 0')
+      end
+    end
+
+    describe '::negative' do
+      it "returns the scope of 'against' votes" do
+        expect(Vote.negative).to eq Vote.where('value < 0')
+      end
     end
   end
 end

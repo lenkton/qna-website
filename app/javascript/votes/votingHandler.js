@@ -35,13 +35,13 @@ function handleDeletedVote(vote, ratingSection) {
   ratingSection.classList.remove('voted')
 
   let ratingValue = Number(ratingSection.querySelector('.rating-value').innerHTML)
-  ratingValue += vote.previous_value ? -1 : 1
+  ratingValue -= vote.previous_value
   ratingSection.querySelector('.rating-value').innerHTML = ratingValue
 }
 
 function handleNewVote(vote, ratingSection) {
   let ratingValue = Number(ratingSection.querySelector('.rating-value').innerHTML)
-  ratingValue += vote.supportive ? 1 : -1
+  ratingValue += vote.value
   ratingSection.querySelector('.rating-value').innerHTML = ratingValue
 
   fixCancelLink(ratingSection, vote.id)

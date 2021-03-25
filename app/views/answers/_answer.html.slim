@@ -8,13 +8,13 @@ li.answer id="answer-#{local_assigns[:answer].id}"
                     method: :post,
                     remote: true,
                     data: { type: :json, votable: :answers },
-                    params: { vote: { supportive: true } }
+                    params: { vote: { value: 1 } }
         =< button_to t('votes.against'),
                     answer_votes_path(answer),
                     method: :post,
                     remote: true,
                     data: { type: :json, votable: :answers },
-                    params: { vote: { supportive: false } }
+                    params: { vote: { value: -1 } }
       .vote-cancel
         - if answer.vote_of(current_user)&.persisted?
           = link_to t('actions.cancel'), vote_path(answer.vote_of(current_user)), method: :delete, remote: true, data: { type: :json }

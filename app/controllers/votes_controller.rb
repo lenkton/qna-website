@@ -11,7 +11,7 @@ class VotesController < ApplicationController
         format.json { head :forbidden }
       else
         vote.save
-        format.json { render json: { votable_sym => { vote: { status: :created, supportive: vote.supportive, id: vote.id } } } }
+        format.json { render json: { votable_sym => { vote: { status: :created, value: vote.value, id: vote.id } } } }
       end
     rescue
       format.json { head :unprocessable_entity }
@@ -22,7 +22,7 @@ class VotesController < ApplicationController
     respond_to do |format|
       if current_user.author_of?(vote)
         vote.destroy
-        format.json { render json: { votable_sym => { vote: { status: :deleted, previous_value: vote.supportive } } } }
+        format.json { render json: { votable_sym => { vote: { status: :deleted, previous_value: vote.value } } } }
       else
         format.json { head :unauthorized }
       end
@@ -36,7 +36,7 @@ class VotesController < ApplicationController
   end
 
   def vote_params
-    params.require(:vote).permit(:supportive)
+    params.require(:vote).permit(:value)
   end
 
   def find_votable

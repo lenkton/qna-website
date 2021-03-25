@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(version: 2021_03_22_163115) do
     t.bigint "author_id", null: false
     t.string "votable_type", null: false
     t.bigint "votable_id", null: false
-    t.boolean "supportive", null: false
+    t.integer "value", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["author_id", "votable_id", "votable_type"], name: "index_votes_on_author_id_and_votable_id_and_votable_type", unique: true

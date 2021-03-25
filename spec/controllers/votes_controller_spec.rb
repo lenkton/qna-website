@@ -14,24 +14,24 @@ RSpec.describe VotesController, type: :controller do
 
       context 'valid params' do
         it 'creates a vote in the database' do
-          expect { post :create, params: { vote: { supportive: true }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json }.to change(votable.votes, :count).by(1)
+          expect { post :create, params: { vote: { value: 1 }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json }.to change(votable.votes, :count).by(1)
         end
 
         it 'renders the created vote object as a JSON' do
-          post :create, params: { vote: { supportive: true }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json
-          expect(response.body).to eq({ votable_type => { vote: { status: :created, supportive: true, id: Vote.last.id } } }.to_json)
+          post :create, params: { vote: { value: 1 }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json
+          expect(response.body).to eq({ votable_type => { vote: { status: :created, value: 1, id: Vote.last.id } } }.to_json)
         end
       end
 
       context 'two same actions in a row' do
-        let!(:existing_vote) { create :vote, author: author, votable: votable, supportive: true }
+        let!(:existing_vote) { create :vote, author: author, votable: votable, value: 1 }
 
         it 'does not create a vote' do
-          expect { post :create, params: { vote: { supportive: true }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json }.not_to change(votable.votes, :count)
+          expect { post :create, params: { vote: { value: 1 }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json }.not_to change(votable.votes, :count)
         end
 
         it 'responces with an error' do
-          post :create, params: { vote: { supportive: true }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json
+          post :create, params: { vote: { value: 1 }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json
           expect(response).to be_unprocessable
         end
       end
@@ -40,22 +40,22 @@ RSpec.describe VotesController, type: :controller do
         let(:own_votable) { create votable_type, author: author }
 
         it 'does not create a vote' do
-          expect { post :create, params: { vote: { supportive: true }, id_field_name_sym => own_votable, votable: votable_plural_sym }, format: :json }.not_to change(own_votable.votes, :count)
+          expect { post :create, params: { vote: { value: 1 }, id_field_name_sym => own_votable, votable: votable_plural_sym }, format: :json }.not_to change(own_votable.votes, :count)
         end
 
         it 'responces with an error' do
-          post :create, params: { vote: { supportive: true }, id_field_name_sym => own_votable, votable: votable_plural_sym }, format: :json
+          post :create, params: { vote: { value: 1 }, id_field_name_sym => own_votable, votable: votable_plural_sym }, format: :json
           expect(response).to be_forbidden
         end
       end
 
       context 'invalid params' do
         it 'does not create a vote' do
-          expect { post :create, params: { vote: { supportive: nil }, id_field_name_sym => votable }, format: :json }.not_to change(Vote, :count)
+          expect { post :create, params: { vote: { value: nil }, id_field_name_sym => votable }, format: :json }.not_to change(Vote, :count)
         end
 
         it 'responces with an error' do
-          post :create, params: { vote: { supportive: nil }, id_field_name_sym => votable }, format: :json
+          post :create, params: { vote: { value: nil }, id_field_name_sym => votable }, format: :json
           expect(response).to be_unprocessable
         end
       end
@@ -74,7 +74,7 @@ RSpec.describe VotesController, type: :controller do
 
       it 'renders a special json response' do
         delete :destroy, params: { id: vote, votable: votable_plural_sym }, format: :json
-        expect(response.body).to eq({ votable_type => { vote: { status: :deleted, previous_value: vote.supportive } } }.to_json)
+        expect(response.body).to eq({ votable_type => { vote: { status: :deleted, previous_value: vote.value } } }.to_json)
       end
     end
 

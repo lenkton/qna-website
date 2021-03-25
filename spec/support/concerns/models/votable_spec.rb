@@ -5,8 +5,8 @@ RSpec.shared_examples_for 'votable' do
 
   describe '#rating' do
     let(:votable) { create described_class.to_s.underscore.to_sym }
-    let!(:votes_for) { create_list :vote, 5, votable: votable, supportive: true }
-    let!(:votes_against) { create_list :vote, 2, votable: votable, supportive: false }
+    let!(:votes_for) { create_list :vote, 5, votable: votable, value: 1 }
+    let!(:votes_against) { create_list :vote, 2, votable: votable, value: -1 }
 
     it 'returns the number of votes for minus the number of votes against the votable' do
       expect(votable.rating).to eq(votes_for.count - votes_against.count)
