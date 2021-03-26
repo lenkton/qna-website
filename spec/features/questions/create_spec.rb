@@ -43,6 +43,28 @@ feature 'Authenticated user can create question', %q(
 
       expect(page).to have_content 'Заголовок вопроса не может быть пустым'
     end
+
+    describe 'multiple sessions', js: true do
+      scenario "a new question appears on another user's page" do
+        Capybara.using_session('guest') do
+          visit questions_path
+        end
+
+        Capybara.using_session('author') do
+          log_in user
+          visit questions_path
+          click_on 'Задать вопрос'
+
+          fill_in 'Заголовок', with: 'Test question'
+          fill_in 'Содержание', with: 'text text text'
+          click_on 'Задать вопрос'
+        end
+
+        Capybara.using_session('guest') do
+          expect(page).to have_link('Test question', href: question_path(Question.last))
+        end
+      end
+    end
   end
 
   scenario 'Unauthenticated user tries to ask a question' do
