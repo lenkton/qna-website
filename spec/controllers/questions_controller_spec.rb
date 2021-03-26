@@ -19,6 +19,11 @@ RSpec.describe QuestionsController, type: :controller do
 
         expect(response).to redirect_to(Question.find_by(title: question_attributes[:title]))
       end
+
+      it 'broadcasts the question to the questions_channel' do
+        expect { post :create, params: { question: attributes_for(:question) } }
+          .to(have_broadcasted_to('questions_channel').with { |data| expect(data.to_json).to eq Question.last.to_json })
+      end
     end
 
     context 'invalid parameters' do
