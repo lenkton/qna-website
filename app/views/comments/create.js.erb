@@ -1,6 +1,0 @@
-<% if comment.errors.any? %>
-  document.getElementById('question-comment-errors').innerHTML = '<%= render 'shared/errors', resource: comment %>'
-<% else %>
-  document.getElementById('question-comment-errors').innerHTML = ''
-  document.getElementById('comment_text').value = ''
-<% end %>

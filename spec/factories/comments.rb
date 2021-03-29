@@ -5,7 +5,7 @@ FactoryBot.define do
 
   factory :comment do
     text { generate :comment_text }
-    question
+    commentable { association :answer }
     author
 
     trait :invalid do

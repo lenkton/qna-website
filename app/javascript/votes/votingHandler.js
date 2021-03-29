@@ -6,6 +6,8 @@ function addHandlers() {
 }
 
 function successAnswersHandler(event) {
+  if(!event.detail[0].answer || !event.detail[0].answer.vote) return
+
   successHandler(
     event.detail[0].answer.vote,
     event.target.closest('.rating')

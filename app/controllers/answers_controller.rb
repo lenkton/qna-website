@@ -6,6 +6,7 @@ class AnswersController < ApplicationController
          build_params: -> { { author: current_user, question: question }.merge(answer_params) },
          scope: -> { Answer.with_attached_files }
   expose :answers, -> { question.answers }
+  expose :comment, -> { answer.comments.new }
 
   def create
     if answer.save

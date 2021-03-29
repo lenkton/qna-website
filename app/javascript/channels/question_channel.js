@@ -21,7 +21,18 @@ function connectToQuestionChannel(id) {
 }
 
 function addComment(commentData) {
-  let commentList = document.getElementById('question-comments')
+  switch(commentData.comment.commentable_type){
+    case "Question":
+      addCommentInto(commentData, 'question-comments')
+      break
+    case "Answer":
+      addCommentInto(commentData, 'answer-' + commentData.comment.commentable_id + '-comments')
+      break
+  }
+}
+
+function addCommentInto(commentData, listId) {
+  let commentList = document.getElementById(listId)
 
   if(!commentList) return
 

@@ -13,6 +13,7 @@ require("@nathanvda/cocoon")
 import "questions/showEditForm"
 import "votes/votingHandler"
 import "answers/showEditForm"
+import "comments/createHandler"
 
 Rails.start()
 Turbolinks.start()

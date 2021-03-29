@@ -1,7 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe CommentsController, type: :controller do
-  let!(:question) { create(:question) }
+  let(:commentable_type) { :answer }
+  let!(:commentable) { create(commentable_type) }
+  let(:commentable_id_sym) { (commentable_type.to_s + '_id').to_sym }
+  let(:channel_id) { commentable.question.id } # depends on the commentable type!
   let(:user) { create :user }
 
   describe 'POST #create' do
@@ -9,20 +12,21 @@ RSpec.describe CommentsController, type: :controller do
       before { log_in user }
 
       context 'valid parameters' do
-        it 'creates a comment for the question in the database' do
-          expect { post :create, params: { comment: attributes_for(:comment), question_id: question }, format: :js }.to change(question.comments, :count).by(1)
+        it 'creates a comment for the commentable in the database' do
+          expect { post :create, params: { comment: attributes_for(:comment), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json }
+            .to change(commentable.comments, :count).by(1)
         end
 
-        it 'renders the create template' do
-          post :create, params: { comment: attributes_for(:comment), question_id: question }, format: :js
+        it 'renders a special JSON' do
+          post :create, params: { comment: attributes_for(:comment), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json
 
-          expect(response).to render_template(:create)
+          expect(response.body).to eq({ comment: Comment.last }.to_json)
         end
 
         it "broadcasts the comment to the question's channel" do
-          expect { post :create, params: { comment: attributes_for(:comment), question_id: question }, format: :js }
+          expect { post :create, params: { comment: attributes_for(:comment), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json }
             .to(
-              have_broadcasted_to("question_#{question.id}_channel")
+              have_broadcasted_to("question_#{channel_id}_channel")
                 .with { |data| expect(data.to_json).to eq({ comment: Comment.last }.to_json) }
             )
         end
@@ -30,18 +34,19 @@ RSpec.describe CommentsController, type: :controller do
 
       context 'invalid parameters' do
         it 'does not create a comment in the database' do
-          expect { post :create, params: { comment: attributes_for(:comment, :invalid), question_id: question }, format: :js }.to_not change(Comment, :count)
+          expect { post :create, params: { comment: attributes_for(:comment, :invalid), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json }
+            .not_to change(Comment, :count)
         end
 
-        it 'renders the create template' do
-          post :create, params: { comment: attributes_for(:comment, :invalid), question_id: question }, format: :js
+        it 'responds with an error' do
+          post :create, params: { comment: attributes_for(:comment, :invalid), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json
 
-          expect(response).to render_template(:create)
+          expect(response).to be_unprocessable
         end
 
         it "broadcasts no comment to the question's channel" do
-          expect { post :create, params: { comment: attributes_for(:comment, :invalid), question_id: question }, format: :js }
-            .not_to have_broadcasted_to("question_#{question.id}_channel")
+          expect { post :create, params: { comment: attributes_for(:comment, :invalid), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json }
+            .not_to have_broadcasted_to("question_#{channel_id}_channel")
         end
       end
     end

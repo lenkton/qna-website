@@ -26,7 +26,7 @@
     #question-comment-errors
       = render 'shared/errors', resource: comment
 
-    = form_for [question, comment], remote: true do |form|
+    = form_for [question, comment], remote: true, type: :json, namespace: 'question' do |form|
       = render 'comments/form', form: form
 
 #question-edit-form.hidden

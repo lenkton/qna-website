@@ -20,6 +20,7 @@ ru:
     requires_authorization: У вас нет достаточных прав для совершения этого действия.
   answers:
     answer:
+      comments: Комментарии
       confirm: Вы уверены?
       destroy: Удалить
       edit: Редактировать
