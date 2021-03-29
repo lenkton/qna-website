@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let(:author) { create(:author) }
   let(:random_user) { create(:user) }
+  let(:gist_url) { 'https://gist.github.com/lenkton/99b9323cc3f01e1d4931486bd65195c4' }
 
   describe 'POST #create' do
     let!(:question) { create(:question) }
@@ -18,6 +19,20 @@ RSpec.describe AnswersController, type: :controller do
         post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js
 
         expect(response).to render_template(:create)
+      end
+
+      it 'broadcasts the question to the questions_channel' do
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }
+          .to(
+            have_broadcasted_to("question_#{question.id}_channel")
+              .with do |data|
+                expect(data.to_json)
+                .to eq(
+                  { answer: Answer.last, links: [], files: [], rating: 0 }
+                  .to_json
+                )
+              end
+          )
       end
     end
 

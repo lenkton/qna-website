@@ -30,6 +30,8 @@ feature 'Authenticated user can write an answer on the question page (without re
         within('#answers') do
           expect(page).to have_link 'rails_helper.rb'
           expect(page).to have_link 'spec_helper.rb'
+          within("#file-#{Answer.last.files.first.id}") { expect(page).to have_button('Удалить') }
+          within("#file-#{Answer.last.files.second.id}") { expect(page).to have_button('Удалить') }
         end
       end
     end

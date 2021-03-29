@@ -11,6 +11,7 @@ class AnswersController < ApplicationController
     if answer.save
       flash.now[:notice] = I18n.t('answers.create.success')
       add_files
+      AnswerBroadcastingService.publish(answer)
     end
   end
 
