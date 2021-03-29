@@ -64,6 +64,26 @@
     {{/each}}
   </ul>
 
+  <ul class="comments" id="answer-{{answer.id}}-comments">
+    <h3>Комментарии</h3>
+  </ul>
+
+  {{#if user}}
+    <div id="answer-{{answer.id}}-comment-errors"></div>
+
+    <form class="new_comment" id="answer_{{answer.id}}_new_comment" action="/answers/{{answer.id}}/comments" accept-charset="UTF-8" data-remote="true" method="post">
+      <div class="field">
+        <label for="answer_{{answer.id}}_comment_text">
+          Комментарий
+        </label>
+        <input type="text" name="comment[text]" id="answer_{{answer.id}}_comment_text">
+      </div>
+      <div class="field">
+        <input type="submit" name="commit" value="Комментировать" data-disable-with="Комментировать">
+      </div>
+    </form>
+  {{/if}}
+
   {{#if author}}
     <a data-confirm="Вы уверены?" data-remote="true" rel="nofollow" data-method="delete" href="/answers/{{answer.id}}">
       Удалить

@@ -57,6 +57,9 @@ feature 'Users get live updates of the content of a question page', %q(
       within '#answers' do
         expect(page).to have_button('За')
         expect(page).to have_button('Против')
+        expect(page).to have_content('Комментарии')
+        expect(page).to have_field('Комментарий')
+        expect(page).to have_button('Комментировать')
       end
     end
   end

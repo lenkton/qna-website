@@ -20,7 +20,12 @@ feature 'Authenticated user can write an answer on the question page (without re
       scenario 'writes an answer' do
         click_on 'Ответить'
 
-        within('#answers') { expect(page).to have_content 'answer body' }
+        within('#answers') do
+          expect(page).to have_content 'answer body'
+          expect(page).to have_content('Комментарии')
+          expect(page).to have_field('Комментарий')
+          expect(page).to have_button('Комментировать')
+        end
       end
 
       scenario 'writes an answer with attached files' do
