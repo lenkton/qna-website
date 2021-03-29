@@ -14,15 +14,25 @@ function connectToQuestionChannel(id) {
 
   oldSubscription = consumer.subscriptions.create({ channel: "QuestionChannel", question_id: id }, {
     received(data) {
-      addAnswer(data)
+      if (data.answer) addAnswer(data)
+      if (data.comment) addComment(data)
     }
   })
+}
+
+function addComment(commentData) {
+  let commentList = document.getElementById('question-comments')
+
+  if(!commentList) return
+
+  let commentTemplate = require('../templates/comment.hbs')
+  commentList.insertAdjacentHTML('beforeend', commentTemplate(commentData))
 }
 
 function addAnswer(answerData) {
   let answersList = document.getElementById('answers')
   
-  if(!answersList || !answerData.answer) return
+  if(!answersList) return
 
   let answerTemplate = require('../templates/answer.hbs')
   let user = document.getElementById('user')

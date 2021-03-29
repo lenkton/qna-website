@@ -36,6 +36,11 @@ RSpec.describe QuestionsController, type: :controller do
 
         expect(response).to render_template(:new)
       end
+
+      it 'broadcasts no question to the questions_channel' do
+        expect { post :create, params: { question: attributes_for(:question, :invalid) } }
+          .not_to have_broadcasted_to('questions_channel')
+      end
     end
   end
 

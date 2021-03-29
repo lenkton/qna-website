@@ -3,5 +3,6 @@
 <% end %>
 
 <% if answer.persisted? %>
+  document.getElementById('answer-errors').innerHTML = ''
   document.getElementById('answer_body').value = ''
 <% end %>

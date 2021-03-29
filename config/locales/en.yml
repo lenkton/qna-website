@@ -117,9 +117,12 @@ en:
       user_rewarded: "%{name} was rewarded for the best answer!"
     show:
       add_answer: Add an answer
+      comments: Comments
       delete_question: Delete question
       edit_submit: Save
       edit_question: Edit question
+      files: Files
+      links: Links
       new_answer: "New answer:"
       send_answer: Send
 

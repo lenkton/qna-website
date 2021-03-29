@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     end
 
     resources :votes, only: %i[create destroy], shallow: true, defaults: { votable: :questions }
+    resources :comments, only: %i[create], shallow: true
 
     post :set_best_answer, on: :member
   end

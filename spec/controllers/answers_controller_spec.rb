@@ -21,7 +21,7 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to render_template(:create)
       end
 
-      it 'broadcasts the question to the questions_channel' do
+      it "broadcasts the question to the question's channel" do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }
           .to(
             have_broadcasted_to("question_#{question.id}_channel")

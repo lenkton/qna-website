@@ -9,6 +9,7 @@ class QuestionsController < ApplicationController
   expose :answer,
          scope: -> { question.answers },
          id: -> { params[:answer_id] }
+  expose :comment, -> { question.comments.new }
 
   def new
     question.links.new
