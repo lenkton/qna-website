@@ -1,0 +1,141 @@
+<li id="answer-{{answer.id}}">
+  <div class="rating" id="answer-{{answer.id}}-rating">
+    <div class="rating-value">
+      {{rating}}
+    </div>
+
+    {{#if user}}
+      {{#unless author}}
+        <div class="vote-actions">
+          <form class="button_to" method="post" action="/answers/{{answer.id}}/votes" data-remote="true">
+            <input data-type="json" data-votable="answers" type="submit" value="За">
+            <input type="hidden" name="vote[value]" value="1">
+          </form>
+          <form class="button_to" method="post" action="/answers/{{answer.id}}/votes" data-remote="true">
+            <input data-type="json" data-votable="answers" type="submit" value="Против">
+            <input type="hidden" name="vote[value]" value="-1">
+          </form>
+        </div>
+        <div class="vote-cancel">
+          <a data-type="json" data-remote="true" rel="nofollow" data-method="delete" href="#">
+            Отменить
+          </a>
+        </div>
+      {{/unless}}
+    {{/if}}
+  </div>
+
+  <p id="answer-{{answer.id}}-body">
+    {{answer.body}}
+  </p>
+
+  <ul id="answer-{{answer.id}}-files">
+    {{#each files}}
+      <li id="file-{{this.id}}">
+        <a href="{{this.url}}">{{this.name}}</a>
+        <form class="button_to" method="post" action="/files/{{this.id}}" data-remote="true">
+          <input type="hidden" name="_method" value="delete">
+          <input data-confirm="Вы уверены?" type="submit" value="Удалить">
+        </form>
+      </li>
+    {{/each}}
+  </ul>
+
+  <ul id="answer-{{answer.id}}-links">
+    {{#each links}}
+      <li id="link-{{this.id}}">
+        <div class="actions">
+          <a data-confirm="Вы уверены?" data-remote="true" rel="nofollow" data-method="delete" href="/links/{{this.id}}">
+            Удалить
+          </a>
+        </div>
+        <a href="{{this.url}}">
+          {{this.name}}
+        </a>
+      </li>
+      {{#if this.gist}}
+        <dl>
+          {{#each gist}}
+            <dt>{{this.filename}}</dt>
+            <dd>{{this.content}}</dd>
+          {{/each}}
+        </dl>
+      {{/if}}
+    {{/each}}
+  </ul>
+
+  <ul class="comments" id="answer-{{answer.id}}-comments">
+    <h3>Комментарии</h3>
+  </ul>
+
+  {{#if user}}
+    <div id="answer-{{answer.id}}-comment-errors"></div>
+
+    <form class="new_comment" id="answer_{{answer.id}}_new_comment" action="/answers/{{answer.id}}/comments" accept-charset="UTF-8" data-remote="true" method="post">
+      <div class="field">
+        <label for="answer_{{answer.id}}_comment_text">
+          Комментарий
+        </label>
+        <input type="text" name="comment[text]" id="answer_{{answer.id}}_comment_text">
+      </div>
+      <div class="field">
+        <input type="submit" name="commit" value="Комментировать" data-disable-with="Комментировать">
+      </div>
+    </form>
+  {{/if}}
+
+  {{#if author}}
+    <a data-confirm="Вы уверены?" data-remote="true" rel="nofollow" data-method="delete" href="/answers/{{answer.id}}">
+      Удалить
+    </a>
+
+    <a class="edit-answer-button" data-answer-id="{{answer.id}}" href="#">
+      Редактировать
+    </a>
+
+    <div class="hidden" id="answer-{{answer.id}}-edit-form">
+      <div id="answer-{{answer.id}}-edit-errors"></div>
+
+      <form class="edit_answer" id="edit_{{answer.id}}_edit_answer_{{answer.id}}" enctype="multipart/form-data" action="/answers/{{answer.id}}" accept-charset="UTF-8" data-remote="true" method="post">
+        <input type="hidden" name="_method" value="patch">
+        
+        <div class="field">
+          <label for="edit_{{answer.id}}_answer_body">
+            Содержание
+          </label>
+
+          <textarea name="answer[body]" id="edit_{{answer.id}}_answer_body">{{answer.body}}</textarea>
+        </div>
+
+        <div class="field">
+          <label for="edit_{{answer.id}}_answer_files">
+            Прикреплённые файлы
+          </label>
+
+          <input multiple="multiple" data-direct-upload-url="http://127.0.0.1:3000/rails/active_storage/direct_uploads" type="file" name="answer[files][]" id="edit_{{answer.id}}_answer_files">
+        </div>
+
+        <div class="field">
+          <h3>
+            Ссылки
+          </h3>
+
+          <div class="actions">
+            <a class="add_fields" data-association="link" data-associations="links" data-association-insertion-template="<div class=&quot;nested-fields&quot;><div class=&quot;field&quot;><label for=&quot;edit_{{answer.id}}_answer_links_attributes_new_links_name&quot;>Название ссылки</label><input type=&quot;text&quot; name=&quot;answer[links_attributes][new_links][name]&quot; id=&quot;edit_{{answer.id}}_answer_links_attributes_new_links_name&quot; /></div><div class=&quot;field&quot;><label for=&quot;edit_{{answer.id}}_answer_links_attributes_new_links_url&quot;>Адрес</label><input type=&quot;url&quot; name=&quot;answer[links_attributes][new_links][url]&quot; id=&quot;edit_{{answer.id}}_answer_links_attributes_new_links_url&quot; /></div><input value=&quot;false&quot; type=&quot;hidden&quot; name=&quot;answer[links_attributes][new_links][_destroy]&quot; id=&quot;edit_{{answer.id}}_answer_links_attributes_new_links__destroy&quot; />
+  <a class=&quot;remove_fields dynamic&quot; href=&quot;#&quot;>Удалить ссылку</a></div>" href="#">
+              Добавить ссылку
+            </a>
+          </div>
+        </div>
+
+        <div class="field">
+          <input type="submit" name="commit" value="Сохранить" data-disable-with="Сохранить">
+        </div>
+      </form>
+
+      <a id="answer-{{answer.id}}-edit-cancel" class="edit-answer-cancel" data-answer-id="{{answer.id}}" href="#">
+        Отменить
+      </a>
+    </div>
+  {{/if}}
+</li>

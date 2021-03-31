@@ -1,4 +1,4 @@
-#question
+#question data-id=question.id
   h1#question-title = question.title
 
   = render 'shared/rating', resource: question, id: "question-rating"
@@ -17,6 +17,17 @@
   ul#question-links
     h3 = t('.links')
     = render question.links
+
+  ul.comments#question-comments
+    h3 = t('.comments')
+    = render question.comments
+
+  - if user_signed_in?
+    #question-comment-errors
+      = render 'shared/errors', resource: comment
+
+    = form_for [question, comment], remote: true, type: :json, namespace: 'question' do |form|
+      = render 'comments/form', form: form
 
 #question-edit-form.hidden
   #question-errors

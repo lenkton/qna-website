@@ -1,4 +1,4 @@
-li.answer id="answer-#{local_assigns[:answer].id}"
+li.answer id="answer-#{local_assigns[:answer].id}" data-id=local_assigns[:answer].id
   = render 'shared/rating', resource: answer, id: "answer-#{answer.id}-rating"
 
   p id="answer-#{local_assigns[:answer].id}-body"
@@ -9,6 +9,17 @@ li.answer id="answer-#{local_assigns[:answer].id}"
 
   ul id="answer-#{local_assigns[:answer].id}-links"
     = render local_assigns[:answer].links
+
+  ul.comments id="answer-#{local_assigns[:answer].id}-comments"
+    h3 = t('.comments')
+    = render local_assigns[:answer].comments
+
+  - if user_signed_in?
+    . id="answer-#{local_assigns[:answer].id}-comment-errors"
+      = render 'shared/errors', resource: comment
+
+    = form_for [answer, comment], remote: true, type: :json, namespace: "answer_#{local_assigns[:answer].id}" do |form|
+      = render 'comments/form', form: form
 
   - if current_user&.author_of?(local_assigns[:answer])
     =< link_to t('.destroy'), local_assigns[:answer], method: :delete, remote: true, data: { confirm: t('.confirm') }

@@ -6,9 +6,11 @@ Rails.application.routes.draw do
   resources :questions, only: %i[index show new create destroy update] do
     resources :answers, only: %i[create destroy update], shallow: true do
       resources :votes, only: %i[create destroy], shallow: true, defaults: { votable: :answers }
+      resources :comments, only: %i[create], shallow: true, defaults: { commentable: :answer }
     end
 
     resources :votes, only: %i[create destroy], shallow: true, defaults: { votable: :questions }
+    resources :comments, only: %i[create], shallow: true, defaults: { commentable: :question }
 
     post :set_best_answer, on: :member
   end
@@ -16,4 +18,6 @@ Rails.application.routes.draw do
   resources :files, only: [:destroy]
   resources :links, only: [:destroy]
   resources :rewards, only: [:index]
+
+  mount ActionCable.server => '/cable'
 end

@@ -51,6 +51,7 @@ en:
     requires_authorization: You are not authorized to perform this action
   answers:
     answer:
+      comments: Comments
       confirm: Are you sure?
       destroy: Delete
       edit: Edit
@@ -117,9 +118,12 @@ en:
       user_rewarded: "%{name} was rewarded for the best answer!"
     show:
       add_answer: Add an answer
+      comments: Comments
       delete_question: Delete question
       edit_submit: Save
       edit_question: Edit question
+      files: Files
+      links: Links
       new_answer: "New answer:"
       send_answer: Send
 

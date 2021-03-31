@@ -4,7 +4,7 @@ li id="link-#{link.id}"
       = link_to t('.delete'), link_path(link), method: :delete, remote: true, data: { confirm: t('.confirmation') }
 
   = link_to link.name, link.url
-  - if link.url =~ /\Ahttps:\/\/gist.github.com\//
+  - if gist?(link.url)
     .gist
       dl
         - gist_files(link.url).each do |filename, hash|

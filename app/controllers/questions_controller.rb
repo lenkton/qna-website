@@ -1,12 +1,15 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, only: %i[create new update destroy set_best_answer]
 
+  after_action :publish_question, only: [:create]
+
   expose :question, scope: -> { Question.with_attached_files }
   expose :questions, -> { Question.all }
   expose :answers, -> { question.answers.filter(&:persisted?) }
   expose :answer,
          scope: -> { question.answers },
          id: -> { params[:answer_id] }
+  expose :comment, -> { question.comments.new }
 
   def new
     question.links.new
@@ -65,5 +68,14 @@ class QuestionsController < ApplicationController
         links_attributes: %i[id name url _destroy],
         reward_attributes: %i[id name image _destroy]
       )
+  end
+
+  def publish_question
+    return if question.errors.any?
+
+    ActionCable.server.broadcast(
+      'questions_channel',
+      question
+    )
   end
 end

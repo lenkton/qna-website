@@ -33,10 +33,11 @@ feature 'User can add links to an answer', %q(
     end
 
     scenario 'adds several links' do
-      within '#answers' do
-        expect(page).to have_link('My gist', href: gist_url)
-        expect(page).to have_link('GH', href: random_url)
-      end
+      expect(page).to have_link('GH', href: random_url)
+      expect(page).to have_link('My gist', href: gist_url)
+
+      within("#link-#{Answer.last.links.first.id}") { expect(page).to have_link('Удалить') }
+      within("#link-#{Answer.last.links.second.id}") { expect(page).to have_link('Удалить') }
     end
 
     scenario 'one of the links is a gist' do
