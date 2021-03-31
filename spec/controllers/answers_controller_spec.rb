@@ -21,10 +21,10 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to render_template(:create)
       end
 
-      it "broadcasts the question to the question's channel" do
+      it "broadcasts the answer to the answers channel" do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }
           .to(
-            have_broadcasted_to("question_#{question.id}_channel")
+            have_broadcasted_to(AnswersChannel.broadcasting_for(question))
               .with do |data|
                 expect(data.to_json)
                 .to eq(

@@ -57,6 +57,34 @@ feature 'Authenticated user can comment an answer', %q(
     end
   end
 
+  scenario 'User comments newly created answer (without reloading the page)', js: true do
+    Capybara.using_session('guest') do
+      visit question_path(question)
+    end
+
+    Capybara.using_session('author') do
+      log_in user
+      visit question_path(question)
+
+      fill_in 'Новый ответ', with: 'New answer'
+      click_on 'Ответить'
+
+      expect(page).to have_content('New answer') # needed for racing condition connected purposes
+
+      within "#answer-#{Answer.last.id}" do
+        fill_in 'Комментарий', with: 'Comment text'
+        click_on 'Комментировать'
+      end
+    end
+
+    Capybara.using_session('guest') do
+      within("#answer-#{Answer.last.id}") do
+        expect(page).to have_content('New answer')
+        expect(page).to have_content('Comment text')
+      end
+    end
+  end
+
   scenario 'Unauthenticated user cannot comment' do
     visit question_path(question)
 

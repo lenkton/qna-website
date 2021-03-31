@@ -1,4 +1,4 @@
-li.answer id="answer-#{local_assigns[:answer].id}"
+li.answer id="answer-#{local_assigns[:answer].id}" data-id=local_assigns[:answer].id
   = render 'shared/rating', resource: answer, id: "answer-#{answer.id}-rating"
 
   p id="answer-#{local_assigns[:answer].id}-body"

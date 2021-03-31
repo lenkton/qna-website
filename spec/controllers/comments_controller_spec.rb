@@ -4,7 +4,6 @@ RSpec.describe CommentsController, type: :controller do
   let(:commentable_type) { :answer }
   let!(:commentable) { create(commentable_type) }
   let(:commentable_id_sym) { (commentable_type.to_s + '_id').to_sym }
-  let(:channel_id) { commentable.question.id } # depends on the commentable type!
   let(:user) { create :user }
 
   describe 'POST #create' do
@@ -23,10 +22,10 @@ RSpec.describe CommentsController, type: :controller do
           expect(response.body).to eq({ comment: Comment.last }.to_json)
         end
 
-        it "broadcasts the comment to the question's channel" do
+        it "broadcasts the comment to the comments channel" do
           expect { post :create, params: { comment: attributes_for(:comment), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json }
             .to(
-              have_broadcasted_to("question_#{channel_id}_channel")
+              have_broadcasted_to(CommentsChannel.broadcasting_for(commentable))
                 .with { |data| expect(data.to_json).to eq({ comment: Comment.last }.to_json) }
             )
         end
@@ -44,9 +43,9 @@ RSpec.describe CommentsController, type: :controller do
           expect(response).to be_unprocessable
         end
 
-        it "broadcasts no comment to the question's channel" do
+        it "broadcasts no comment to the comments channel" do
           expect { post :create, params: { comment: attributes_for(:comment, :invalid), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json }
-            .not_to have_broadcasted_to("question_#{channel_id}_channel")
+            .not_to have_broadcasted_to(CommentsChannel.broadcasting_for(commentable))
         end
       end
     end

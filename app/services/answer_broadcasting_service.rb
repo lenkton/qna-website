@@ -1,8 +1,8 @@
 class AnswerBroadcastingService
   class << self
     def publish(answer)
-      ActionCable.server.broadcast(
-        "question_#{answer.question_id}_channel",
+      AnswersChannel.broadcast_to(
+        answer.question,
         {
           answer: answer,
           links: answer.links.map { |link| compose_link(link) },

@@ -22,8 +22,8 @@ class CommentsController < ApplicationController
   end
 
   def broadcast_comment
-    ActionCable.server.broadcast(
-      "question_#{channel_id}_channel",
+    CommentsChannel.broadcast_to(
+      commentable,
       comment_info
     )
   end
@@ -42,12 +42,5 @@ class CommentsController < ApplicationController
 
   def commentable_id_sym
     "#{commentable_type}_id".to_sym
-  end
-
-  def channel_id
-    case commentable_type
-    when :answer then commentable.question_id
-    when :question then commentable.id
-    end
   end
 end
