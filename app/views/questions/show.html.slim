@@ -3,8 +3,10 @@
 
   = render 'shared/rating', resource: question, id: "question-rating"
 
-  - if current_user&.author_of?(question)
+  - if can? :destroy, question
     = link_to t('.delete_question'), question_path(question), method: :delete, data: { confirm: t('actions.destroy_confirmation') }
+
+  - if can? :update, question
     = link_to t('.edit_question'), '#', id: 'question-edit-button'
 
   p#question-body = question.body
@@ -22,7 +24,7 @@
     h3 = t('.comments')
     = render question.comments
 
-  - if user_signed_in?
+  - if can? :create, Comment
     #question-comment-errors
       = render 'shared/errors', resource: comment
 
@@ -41,7 +43,7 @@ ul#answers
       = render question.best_answer
   = render(answers - [question.best_answer])
 
-- if user_signed_in?
+- if can? :create, Answer
   #answer-errors
     = render 'shared/errors', resource: answer
   = form_for [question, answer], remote: true do |form|

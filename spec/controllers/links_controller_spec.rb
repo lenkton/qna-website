@@ -20,19 +20,5 @@ RSpec.describe LinksController, type: :controller do
         expect(response).to render_template(:destroy)
       end
     end
-
-    context 'Random user' do
-      before { log_in random_user }
-
-      it 'does not delete the link' do
-        expect { delete :destroy, params: { id: link }, format: :js }.not_to change(question.links, :count)
-      end
-
-      it 'renders a destroy template' do
-        delete :destroy, params: { id: link }, format: :js
-
-        expect(response).to render_template(:destroy)
-      end
-    end
   end
 end

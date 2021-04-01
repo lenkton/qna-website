@@ -1,6 +1,6 @@
 li id="file-#{file.id}"
   = link_to file.filename.to_s, url_for(file)
-  - if current_user&.author_of?(file.record)
+  - if can? :destroy, file
     = button_to t('.delete'),
                 file_path(file),
                 method: :delete,

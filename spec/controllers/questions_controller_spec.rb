@@ -64,10 +64,6 @@ RSpec.describe QuestionsController, type: :controller do
     context 'Random user' do
       before { log_in(random_user) }
 
-      it 'does not destroy the question' do
-        expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
-      end
-
       it 'redirects to the question page' do
         delete :destroy, params: { id: question }
 
@@ -116,19 +112,10 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'Random user' do
-      before do
+      it 'renders the update template' do
         log_in(random_user)
         patch :update, params: { id: question, question: new_values }, format: :js
-      end
 
-      it 'does not change the question' do
-        question.reload
-
-        expect(question.body).to eq old_values[:body]
-        expect(question.title).to eq old_values[:title]
-      end
-
-      it 'renders the update template' do
         expect(response).to render_template(:update)
       end
     end
@@ -178,17 +165,10 @@ RSpec.describe QuestionsController, type: :controller do
     context 'Random user' do
       let!(:original_best_answer) { question.best_answer }
 
-      before do
+      it 'renders set_best_answer template' do
         log_in random_user
         post :set_best_answer, params: { id: question, answer_id: answer }, format: :js
-      end
 
-      it 'does not change the best answer' do
-        question.reload
-        expect(question.best_answer).to eq original_best_answer
-      end
-
-      it 'renders set_best_answer template' do
         expect(response).to render_template :set_best_answer
       end
     end

@@ -2,8 +2,12 @@ class VotesController < ApplicationController
   before_action :authenticate_user!, only: %i[create destroy]
 
   expose :votable, -> { Vote.find_by(id: params[:id])&.votable || find_votable }
-  expose :vote, scope: -> { votable.votes },
-                build_params: -> { { author: current_user }.merge(vote_params) }
+  expose! :vote, scope: -> { votable.votes },
+                 build_params: -> { { author: current_user }.merge(vote_params) }
+
+  authorize_resource :exposed_vote, parent: false, class: 'Vote'
+
+  rescue_from NameError, with: :name_error_handler
 
   def create
     respond_to do |format|
@@ -20,12 +24,8 @@ class VotesController < ApplicationController
 
   def destroy
     respond_to do |format|
-      if current_user.author_of?(vote)
-        vote.destroy
-        format.json { render json: { votable_sym => { vote: { status: :deleted, previous_value: vote.value } } } }
-      else
-        format.json { head :unauthorized }
-      end
+      vote.destroy
+      format.json { render json: { votable_sym => { vote: { status: :deleted, previous_value: vote.value } } } }
     end
   end
 
@@ -48,6 +48,12 @@ class VotesController < ApplicationController
   end
 
   def votable_id_sym
-    (votable_name.to_s.singularize + '_id').to_sym
+    "#{votable_name.to_s.singularize}_id".to_sym
+  end
+
+  def name_error_handler
+    respond_to do |format|
+      format.json { head :unprocessable_entity }
+    end
   end
 end

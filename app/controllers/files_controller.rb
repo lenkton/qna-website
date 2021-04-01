@@ -1,9 +1,11 @@
 class FilesController < ApplicationController
   before_action :authenticate_user!, only: %i[destroy]
 
-  expose :file, scope: -> { ActiveStorage::Attachment }
+  expose! :file, scope: -> { ActiveStorage::Attachment }
+
+  authorize_resource :exposed_file, class: 'ActiveStorage::Attachment', parent: false
 
   def destroy
-    file.purge if current_user.author_of?(file.record)
+    file.purge
   end
 end

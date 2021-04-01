@@ -2,7 +2,9 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!, only: [:create]
 
   expose :commentable, -> { commentable_klass.find_by(id: params[commentable_id_sym]) }
-  expose :comment, scope: -> { commentable.comments }, build_params: -> { { author: current_user }.merge(comment_params) }
+  expose! :comment, scope: -> { commentable.comments }, build_params: -> { { author: current_user }.merge(comment_params) }
+
+  authorize_resource :exposed_comment, parent: false, class: 'Comment'
 
   def create
     respond_to do |format|
