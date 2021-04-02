@@ -41,11 +41,10 @@ class AnswersController < ApplicationController
   end
 
   def rescue_from_access_denied
-    case action_name
-    when 'destroy'
-      render action_name, alert: I18n.t('alert.requires_authorization')
-    else
-      render action_name
+    respond_to do |format|
+      format.json { head :unauthorized }
+      format.js { render action_name, status: :unauthorized }
+      format.html { render action_name, alert: I18n.t('alert.requires_authorization') }
     end
   end
 end
