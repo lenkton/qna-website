@@ -43,7 +43,7 @@ class AnswersController < ApplicationController
   def rescue_from_access_denied
     respond_to do |format|
       format.json { head :unauthorized }
-      format.js { render action_name, status: :unauthorized }
+      format.js { head :unauthorized }
       format.html { render action_name, alert: I18n.t('alert.requires_authorization') }
     end
   end
