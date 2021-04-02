@@ -20,19 +20,5 @@ RSpec.describe FilesController, type: :controller do
         expect(response).to render_template(:destroy)
       end
     end
-
-    context 'Random user' do
-      before { log_in random_user }
-
-      it 'does not purge the file' do
-        expect { delete :destroy, params: { id: file }, format: :js }.not_to change(question.files, :count)
-      end
-
-      it 'renders a destroy template' do
-        delete :destroy, params: { id: file }, format: :js
-
-        expect(response).to render_template(:destroy)
-      end
-    end
   end
 end

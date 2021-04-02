@@ -77,23 +77,5 @@ RSpec.describe VotesController, type: :controller do
         expect(response.body).to eq({ votable_type => { vote: { status: :deleted, previous_value: vote.value } } }.to_json)
       end
     end
-
-    context 'Random user' do
-      before { log_in create(:user) }
-
-      it 'does not destroy the vote' do
-        expect { delete :destroy, params: { id: vote, votable: votable_plural_sym }, format: :json }.not_to change(vote.votable.votes, :count)
-      end
-
-
-      it 'does not destroy the vote' do
-        expect { delete :destroy, params: { id: vote, votable: votable_plural_sym }, format: :json }.not_to change(vote.votable.votes, :count)
-      end
-
-      it 'returns an unauthorized error response' do
-        delete :destroy, params: { id: vote, votable: votable_plural_sym }, format: :json
-        expect(response).to be_unauthorized
-      end
-    end
   end
 end

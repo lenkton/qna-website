@@ -1,6 +1,6 @@
 .rating id=local_assigns.fetch(:id, nil) class=('voted' if resource.vote_of(current_user)&.persisted?)
     .rating-value = resource.rating
-    - if user_signed_in? && !current_user.author_of?(resource)
+    - if can?(:create, Vote) && !current_user.author_of?(resource)
       .vote-actions
         =< button_to t('votes.for'),
                     polymorphic_path([resource, Vote]),

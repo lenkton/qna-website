@@ -3,13 +3,17 @@ class QuestionsController < ApplicationController
 
   after_action :publish_question, only: [:create]
 
-  expose :question, scope: -> { Question.with_attached_files }
+  expose! :question, scope: -> { Question.with_attached_files }
   expose :questions, -> { Question.all }
   expose :answers, -> { question.answers.filter(&:persisted?) }
   expose :answer,
          scope: -> { question.answers },
          id: -> { params[:answer_id] }
   expose :comment, -> { question.comments.new }
+
+  authorize_resource :exposed_question, parent: false, class: 'Question'
+
+  rescue_from CanCan::AccessDenied, with: :rescue_from_access_denied
 
   def new
     question.links.new
@@ -30,24 +34,16 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(question)
-      question.destroy
-      redirect_to questions_path, notice: I18n.t('questions.destroy.success')
-    else
-      redirect_to question, alert: I18n.t('alert.requires_authorization')
-    end
+    question.destroy
+    redirect_to questions_path, notice: I18n.t('questions.destroy.success')
   end
 
   def update
-    if current_user.author_of?(question)
-      question.update(question_params)
-      add_files
-    end
+    question.update(question_params)
+    add_files
   end
 
   def set_best_answer
-    return unless current_user.author_of?(question)
-
     answer.choose_best!
     flash[:notice] = (flash[:notice] || '') + I18n.t('questions.set_best_answer.user_rewarded', name: answer.author.email)
   rescue
@@ -77,5 +73,14 @@ class QuestionsController < ApplicationController
       'questions_channel',
       question
     )
+  end
+
+  def rescue_from_access_denied
+    case action_name
+    when 'destroy'
+      redirect_to question, alert: I18n.t('alert.requires_authorization')
+    else
+      render action_name
+    end
   end
 end

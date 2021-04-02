@@ -68,16 +68,11 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'Random user' do
-      before { log_in(random_user) }
-
-      it 'does not delete the answer in the database' do
-        expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
-      end
-
-      it 'renders the destroy template' do
+      it 'responds with the `unauthorized` error' do
+        log_in(random_user)
         delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to render_template(:destroy)
+        expect(response).to be_unauthorized
       end
     end
   end
@@ -118,19 +113,11 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'Random user' do
-      before do
+      it 'responds with the `unauthorized` error' do
         log_in(random_user)
         patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
-      end
 
-      it 'does not change the answer' do
-        answer.reload
-
-        expect(answer.body).to eq 'old body'
-      end
-
-      it 'renders the update template' do
-        expect(response).to render_template(:update)
+        expect(response).to be_unauthorized
       end
     end
   end
