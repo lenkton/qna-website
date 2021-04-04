@@ -20,16 +20,17 @@ describe 'Profiles API', type: :request do
       let(:recieved_questions) { json['questions'] }
       let(:recieved_question) { recieved_questions.first }
 
+      it_behaves_like 'API Fieldable' do
+        let(:public_fields) { %w[id title body author_id created_at updated_at] }
+        let(:private_fields) { %w[] }
+        let(:fieldable) { question }
+        let(:received_fieldable) { recieved_question }
+      end
+
       before { get api_path, params: { access_token: access_token.token }, headers: headers }
 
       it 'returns a list of questions' do
         expect(recieved_questions.size).to eq questions_list_size
-      end
-
-      it 'returns all public fields' do
-        %w[id title body author_id created_at updated_at].each do |attr|
-          expect(recieved_question[attr]).to eq question.send(attr).as_json
-        end
       end
     end
   end
