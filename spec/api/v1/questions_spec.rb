@@ -67,4 +67,41 @@ describe 'Profiles API', type: :request do
       end
     end
   end
+
+  describe 'POST /api/v1/questions' do
+    let(:headers) { { 'ACCEPT' => 'application/json' } }
+    let(:api_method) { :post }
+    let(:api_path) { '/api/v1/questions' }
+    let(:access_token) { create :access_token }
+    let(:question_params) { attributes_for :question, author_id: access_token.resource_owner_id, links_attributes: attributes_for_list(:link, 5), reward: attributes_for(:reward) }
+    let(:additional_params) { { question: question_params } }
+    let(:question) { Question.last }
+    let(:links) { question.links }
+
+    it_behaves_like 'API Authorizable'
+
+    context 'authorized' do
+      context 'valid params' do
+        let(:received_question) { json['question'] }
+
+        it_behaves_like 'API Fieldable' do
+          let(:public_fields) { %w[id title body author_id created_at updated_at] }
+          let(:received_fieldable) { json['question'] }
+          let(:fieldable) { question }
+        end
+
+        it_behaves_like 'API Linkable' do
+          let(:linkable) { question }
+          let(:received_linkable) { received_question }
+        end
+      end
+
+      context 'invalid params' do
+        it 'returns `unprocessable` status' do
+          post api_path, params: { access_token: access_token.token, question: attributes_for(:question, :invalid) }, headers: headers
+          expect(response).to be_unprocessable
+        end
+      end
+    end
+  end
 end
