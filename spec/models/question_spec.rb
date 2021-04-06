@@ -4,17 +4,12 @@ RSpec.describe Question, type: :model do
   it_behaves_like 'authorable'
   it_behaves_like 'votable'
   it_behaves_like 'commentable'
+  it_behaves_like 'linkable'
+  it_behaves_like 'fileable'
 
   it { should have_many(:answers).dependent(:destroy) }
-  it { should have_many(:links).dependent(:destroy) }
   it { should have_one(:reward).dependent(:destroy) }
   it { should belong_to(:best_answer).optional }
-
-  it 'has many attached files' do
-    expect(Question.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
-  end
-
-  it { should accept_nested_attributes_for :links }
 
   it { should validate_presence_of :title }
   it { should validate_presence_of :body }
