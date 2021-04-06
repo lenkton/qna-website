@@ -66,11 +66,8 @@ describe 'Profiles API', type: :request do
         let(:received_fileable) { received_question }
       end
 
-      context 'invalid params' do
-        it 'returns 404 error' do
-          get "/api/v1/questions/#{question.id + 1}", params: { access_token: access_token.token }, headers: headers
-          expect(response.status).to eq 404
-        end
+      it_behaves_like 'API Not Foundable' do
+        let(:invalid_path) { "/api/v1/questions/#{question.id + 1}" }
       end
     end
   end
@@ -80,7 +77,7 @@ describe 'Profiles API', type: :request do
     let(:api_method) { :post }
     let(:api_path) { '/api/v1/questions' }
     let(:access_token) { create :access_token }
-    let(:question_params) { attributes_for :question, author_id: access_token.resource_owner_id, links_attributes: attributes_for_list(:link, 5), reward: attributes_for(:reward) }
+    let(:question_params) { attributes_for :question, author_id: access_token.resource_owner_id, links_attributes: attributes_for_list(:link, 5) }
     let(:additional_params) { { question: question_params } }
     let(:question) { Question.last }
     let(:links) { question.links }
