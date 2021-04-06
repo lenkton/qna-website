@@ -3,6 +3,8 @@ class Api::V1::QuestionsController < Api::V1::BaseController
 
   authorize_resource :exposed_question, parent: false, class: 'Question'
 
+  rescue_from ActiveRecord::RecordNotFound, with: :rescue_record_not_found
+
   def show
     render json: question, serializer: QuestionFullSerializer
   end
@@ -27,6 +29,10 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     end
   end
 
+  def destroy
+    question.destroy
+  end
+
   private
 
   def question_params
@@ -37,5 +43,9 @@ class Api::V1::QuestionsController < Api::V1::BaseController
         :body,
         links_attributes: %i[id name url _destroy]
       )
+  end
+
+  def rescue_record_not_found
+    head 404
   end
 end

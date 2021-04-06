@@ -63,7 +63,14 @@ describe 'Profiles API', type: :request do
       it_behaves_like 'API Fileable' do
         let!(:fileable) { question }
         let(:files) { fileable.files }
-        let(:received_fileable) { received_question}
+        let(:received_fileable) { received_question }
+      end
+
+      context 'invalid params' do
+        it 'returns 404 error' do
+          get "/api/v1/questions/#{question.id + 1}", params: { access_token: access_token.token }, headers: headers
+          expect(response.status).to eq 404
+        end
       end
     end
   end
@@ -142,6 +149,33 @@ describe 'Profiles API', type: :request do
 
       it_behaves_like 'API Invalidable' do
         let(:invalid_params) { { question: attributes_for(:question, :invalid) } }
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/questions/:id' do
+    let(:headers) { { 'ACCEPT' => 'application/json' } }
+    let(:api_method) { :delete }
+    let(:api_path) { "/api/v1/questions/#{old_question.id}" }
+    let(:access_token) { create :access_token }
+    let(:old_question) { create :question, author_id: access_token.resource_owner_id }
+
+    it_behaves_like 'API Authorizable'
+
+    context 'random user' do
+      let(:random_access_token) { create :access_token }
+
+      it 'returns unauthorized error' do
+        delete api_path, params: { access_token: random_access_token.token }, headers: headers
+        expect(response).to be_unauthorized
+      end
+    end
+
+    context 'authorized' do
+      it 'actually deletes a question' do
+        delete api_path, params: { access_token: access_token.token }, headers: headers
+        get api_path, params: { access_token: access_token.token }, headers: headers
+        expect(response.status).to eq 404
       end
     end
   end
