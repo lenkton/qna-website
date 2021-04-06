@@ -96,11 +96,52 @@ describe 'Profiles API', type: :request do
         end
       end
 
-      context 'invalid params' do
-        it 'returns `unprocessable` status' do
-          post api_path, params: { access_token: access_token.token, question: attributes_for(:question, :invalid) }, headers: headers
-          expect(response).to be_unprocessable
+      it_behaves_like 'API Invalidable' do
+        let(:invalid_params) { { question: attributes_for(:question, :invalid) } }
+      end
+    end
+  end
+
+  describe 'PATCH /api/v1/questions/:id' do
+    let(:headers) { { 'ACCEPT' => 'application/json' } }
+    let(:api_method) { :patch }
+    let(:api_path) { "/api/v1/questions/#{old_question.id}" }
+    let(:access_token) { create :access_token }
+    let(:question_params) { attributes_for :question, author_id: access_token.resource_owner_id, links_attributes: attributes_for_list(:link, 5), reward: attributes_for(:reward) }
+    let(:additional_params) { { question: question_params } }
+    let(:old_question) { create :question, author_id: access_token.resource_owner_id }
+    let(:question) { old_question.reload }
+    let(:links) { question.links }
+
+    it_behaves_like 'API Authorizable'
+
+    context 'random user' do
+      let(:random_access_token) { create :access_token }
+
+      it 'returns unauthorized error' do
+        patch api_path, params: { access_token: random_access_token.token, question: question_params }, headers: headers
+        expect(response).to be_unauthorized
+      end
+    end
+
+    context 'authorized' do
+      context 'valid params' do
+        let(:received_question) { json['question'] }
+
+        it_behaves_like 'API Fieldable' do
+          let(:public_fields) { %w[id title body author_id created_at updated_at] }
+          let(:received_fieldable) { json['question'] }
+          let(:fieldable) { question }
         end
+
+        it_behaves_like 'API Linkable' do
+          let(:linkable) { question }
+          let(:received_linkable) { received_question }
+        end
+      end
+
+      it_behaves_like 'API Invalidable' do
+        let(:invalid_params) { { question: attributes_for(:question, :invalid) } }
       end
     end
   end
