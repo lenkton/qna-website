@@ -111,7 +111,7 @@ describe 'Profiles API', type: :request do
     let(:api_method) { :patch }
     let(:api_path) { "/api/v1/questions/#{old_question.id}" }
     let(:access_token) { create :access_token }
-    let(:question_params) { attributes_for :question, author_id: access_token.resource_owner_id, links_attributes: attributes_for_list(:link, 5), reward: attributes_for(:reward) }
+    let(:question_params) { attributes_for :question, author_id: access_token.resource_owner_id, links_attributes: attributes_for_list(:link, 5) }
     let(:additional_params) { { question: question_params } }
     let(:old_question) { create :question, author_id: access_token.resource_owner_id }
     let(:question) { old_question.reload }

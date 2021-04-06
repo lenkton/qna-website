@@ -108,4 +108,75 @@ describe 'Answers API', type: :request do
       end
     end
   end
+
+  describe 'PATCH /api/v1/answers/:id' do
+    let(:headers) { { 'ACCEPT' => 'application/json' } }
+    let(:api_method) { :patch }
+    let(:api_path) { "/api/v1/answers/#{old_answer.id}" }
+    let(:access_token) { create :access_token }
+    let(:answer_params) { attributes_for :answer, author_id: access_token.resource_owner_id, links_attributes: attributes_for_list(:link, 5) }
+    let(:additional_params) { { answer: answer_params } }
+    let(:old_answer) { create :answer, author_id: access_token.resource_owner_id }
+    let(:answer) { old_answer.reload }
+    let(:links) { answer.links }
+
+    it_behaves_like 'API Authorizable'
+
+    context 'random user' do
+      let(:random_access_token) { create :access_token }
+
+      it 'returns unauthorized error' do
+        patch api_path, params: { access_token: random_access_token.token, answer: answer_params }, headers: headers
+        expect(response).to be_unauthorized
+      end
+    end
+
+    context 'authorized' do
+      context 'valid params' do
+        let(:received_answer) { json['answer'] }
+
+        it_behaves_like 'API Fieldable' do
+          let(:public_fields) { %w[id body author_id created_at updated_at] }
+          let(:received_fieldable) { json['answer'] }
+          let(:fieldable) { answer }
+        end
+
+        it_behaves_like 'API Linkable' do
+          let(:linkable) { answer }
+          let(:received_linkable) { received_answer }
+        end
+      end
+
+      it_behaves_like 'API Invalidable' do
+        let(:invalid_params) { { answer: attributes_for(:answer, :invalid) } }
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/answers/:id' do
+    let(:headers) { { 'ACCEPT' => 'application/json' } }
+    let(:api_method) { :delete }
+    let(:api_path) { "/api/v1/answers/#{old_answer.id}" }
+    let(:access_token) { create :access_token }
+    let(:old_answer) { create :answer, author_id: access_token.resource_owner_id }
+
+    it_behaves_like 'API Authorizable'
+
+    context 'random user' do
+      let(:random_access_token) { create :access_token }
+
+      it 'returns unauthorized error' do
+        delete api_path, params: { access_token: random_access_token.token }, headers: headers
+        expect(response).to be_unauthorized
+      end
+    end
+
+    context 'authorized' do
+      it 'actually deletes a answer' do
+        delete api_path, params: { access_token: access_token.token }, headers: headers
+        get api_path, params: { access_token: access_token.token }, headers: headers
+        expect(response.status).to eq 404
+      end
+    end
+  end
 end
