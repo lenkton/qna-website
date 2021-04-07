@@ -10,12 +10,12 @@ RSpec.describe CommentsController, type: :controller do
     describe 'Authenticated user' do
       before { log_in user }
 
-      context 'valid parameters' do
-        it 'creates a comment for the commentable in the database' do
-          expect { post :create, params: { comment: attributes_for(:comment), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json }
-            .to change(commentable.comments, :count).by(1)
-        end
+      it_behaves_like 'Controller Createable', :comment do
+        let(:format) { :json }
+        let(:additional_params) { { commentable_id_sym => commentable.id, commentable: commentable_type } }
+      end
 
+      context 'valid parameters' do
         it 'renders a special JSON' do
           post :create, params: { comment: attributes_for(:comment), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json
 
@@ -32,11 +32,6 @@ RSpec.describe CommentsController, type: :controller do
       end
 
       context 'invalid parameters' do
-        it 'does not create a comment in the database' do
-          expect { post :create, params: { comment: attributes_for(:comment, :invalid), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json }
-            .not_to change(Comment, :count)
-        end
-
         it 'responds with an error' do
           post :create, params: { comment: attributes_for(:comment, :invalid), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json
 

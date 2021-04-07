@@ -12,11 +12,12 @@ RSpec.describe VotesController, type: :controller do
 
       before { log_in author }
 
-      context 'valid params' do
-        it 'creates a vote in the database' do
-          expect { post :create, params: { vote: { value: 1 }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json }.to change(votable.votes, :count).by(1)
-        end
+      it_behaves_like 'Controller Createable', :vote do
+        let(:format) { :json }
+        let(:additional_params) { { id_field_name_sym => votable, votable: votable_plural_sym } }
+      end
 
+      context 'valid params' do
         it 'renders the created vote object as a JSON' do
           post :create, params: { vote: { value: 1 }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json
           expect(response.body).to eq({ votable_type => { vote: { status: :created, value: 1, id: Vote.last.id } } }.to_json)
@@ -50,10 +51,6 @@ RSpec.describe VotesController, type: :controller do
       end
 
       context 'invalid params' do
-        it 'does not create a vote' do
-          expect { post :create, params: { vote: { value: nil }, id_field_name_sym => votable }, format: :json }.not_to change(Vote, :count)
-        end
-
         it 'responces with an error' do
           post :create, params: { vote: { value: nil }, id_field_name_sym => votable }, format: :json
           expect(response).to be_unprocessable

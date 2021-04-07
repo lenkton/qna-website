@@ -10,18 +10,19 @@ RSpec.describe AnswersController, type: :controller do
 
     before { log_in(author) }
 
-    context 'valid parameters' do
-      it 'creates an answer for the question in the database' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }.to change(question.answers, :count).by(1)
-      end
+    it_behaves_like 'Controller Createable', :answer do
+      let(:format) { :js }
+      let(:additional_params) { { question_id: question } }
+    end
 
+    context 'valid parameters' do
       it 'renders the create template' do
         post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js
 
         expect(response).to render_template(:create)
       end
 
-      it "broadcasts the answer to the answers channel" do
+      it 'broadcasts the answer to the answers channel' do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }
           .to(
             have_broadcasted_to(AnswersChannel.broadcasting_for(question))
@@ -37,10 +38,6 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'invalid parameters' do
-      it 'does not create an answer in the database' do
-        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js }.to_not change(Answer, :count)
-      end
-
       it 'renders the create template' do
         post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js
 
