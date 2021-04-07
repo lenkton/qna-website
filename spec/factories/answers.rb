@@ -12,6 +12,10 @@ FactoryBot.define do
       body { nil }
     end
 
+    trait :old do
+      body { 'old body' }
+    end
+
     factory :answer_with_files do
       after(:create) do |answer, evaluator|
         answer.files.attach(io: File.open('Gemfile'), filename: 'Gemfile')

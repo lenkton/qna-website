@@ -41,48 +41,22 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:old_values) { { title: 'old title', body: 'old body' } }
-    let(:new_values) { { title: 'new title', body: 'new body' } }
-    let!(:question) { create(:question, author: author, title: old_values[:title], body: old_values[:body]) }
-
     context 'Author' do
       before { log_in(author) }
 
-      context 'with valid parameters' do
-        before { patch :update, params: { id: question, question: new_values }, format: :js }
-
-        it 'updates the question' do
-          question.reload
-
-          expect(question.body).to eq new_values[:body]
-          expect(question.title).to eq new_values[:title]
-        end
-
-        it 'renders the update template' do
-          expect(response).to render_template(:update)
-        end
-      end
-
-      context 'with invalid parameters' do
-        before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js }
-
-        it 'does not change the question' do
-          question.reload
-
-          expect(question.body).to eq old_values[:body]
-          expect(question.title).to eq old_values[:title]
-        end
-
-        it 'renders the update template' do
-          expect(response).to render_template(:update)
-        end
+      it_behaves_like 'Controller Updateable', :question do
+        let(:format) { :js }
+        let(:success_response) { render_template(:update) }
+        let(:failure_response) { render_template(:update) }
       end
     end
 
     context 'Random user' do
+      let!(:question) { create(:question, author: author) }
+
       it 'renders the update template' do
         log_in(random_user)
-        patch :update, params: { id: question, question: new_values }, format: :js
+        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
 
         expect(response).to render_template(:update)
       end
