@@ -10,14 +10,10 @@ RSpec.describe FilesController, type: :controller do
     context 'Author of a resource' do
       before { log_in author }
 
-      it 'purges the file' do
-        expect { delete :destroy, params: { id: file }, format: :js }.to change(question.files, :count).by(-1)
-      end
-
-      it 'renders a destroy template' do
-        delete :destroy, params: { id: file }, format: :js
-
-        expect(response).to render_template(:destroy)
+      it_behaves_like 'Controller Deleteable', :file do
+        let(:success_response) { render_template(:destroy) }
+        let(:format) { :js }
+        let(:scope) { question.files }
       end
     end
   end

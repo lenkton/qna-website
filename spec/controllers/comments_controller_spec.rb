@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe CommentsController, type: :controller do
   let(:commentable_type) { :answer }
   let!(:commentable) { create(commentable_type) }
-  let(:commentable_id_sym) { (commentable_type.to_s + '_id').to_sym }
+  let(:commentable_id_sym) { "#{commentable_type}_id".to_sym }
   let(:user) { create :user }
 
   describe 'POST #create' do

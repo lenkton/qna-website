@@ -24,14 +24,8 @@ RSpec.describe QuestionsController, type: :controller do
     context 'Author' do
       before { log_in(author) }
 
-      it 'destroys the question' do
-        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
-      end
-
-      it 'redirects to the questions page' do
-        delete :destroy, params: { id: question }
-
-        expect(response).to redirect_to questions_path
+      it_behaves_like 'Controller Deleteable', :question do
+        let(:success_response) { redirect_to questions_path }
       end
     end
 

@@ -53,13 +53,9 @@ RSpec.describe VotesController, type: :controller do
     context 'The author' do
       before { log_in author }
 
-      it 'destroys the vote' do
-        expect { delete :destroy, params: { id: vote, votable: votable_plural_sym }, format: :json }.to change(votable.votes, :count).by(-1)
-      end
-
-      it 'renders a special json response' do
-        delete :destroy, params: { id: vote, votable: votable_plural_sym }, format: :json
-        expect(response.body).to eq({ votable_type => { vote: { status: :deleted, previous_value: vote.value } } }.to_json)
+      it_behaves_like 'Controller Deleteable', :vote do
+        let(:success_response) { satisfy { response.body == { votable_type => { vote: { status: :deleted, previous_value: vote.value } } }.to_json } }
+        let(:format) { :json }
       end
     end
   end

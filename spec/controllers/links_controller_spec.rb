@@ -10,14 +10,9 @@ RSpec.describe LinksController, type: :controller do
     context 'Author of a resource' do
       before { log_in author }
 
-      it 'deletes the link' do
-        expect { delete :destroy, params: { id: link }, format: :js }.to change(question.links, :count).by(-1)
-      end
-
-      it 'renders a destroy template' do
-        delete :destroy, params: { id: link }, format: :js
-
-        expect(response).to render_template(:destroy)
+      it_behaves_like 'Controller Deleteable', :link do
+        let(:success_response) { render_template(:destroy) }
+        let(:format) { :js }
       end
     end
   end

@@ -32,13 +32,8 @@ RSpec.describe AnswersController, type: :controller do
     context 'Author' do
       before { log_in(author) }
 
-      it 'deletes his/her answer' do
-        expect { delete :destroy, params: { id: answer }, format: :js }.to change(question.answers, :count).by(-1)
-      end
-
-      it_behaves_like 'Controller Renderable' do
-        let(:expected_response) { render_template(:destroy) }
-        let(:params) { { id: answer } }
+      it_behaves_like 'Controller Deleteable', :answer do
+        let(:success_response) { render_template(:destroy) }
       end
     end
   end
