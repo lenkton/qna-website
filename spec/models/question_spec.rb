@@ -6,12 +6,10 @@ RSpec.describe Question, type: :model do
   it_behaves_like 'commentable'
   it_behaves_like 'linkable'
   it_behaves_like 'fileable'
+  it_behaves_like 'rewardable'
 
   it { should have_many(:answers).dependent(:destroy) }
-  it { should have_one(:reward).dependent(:destroy) }
   it { should belong_to(:best_answer).optional }
-
-  it { should accept_nested_attributes_for :reward }
 
   it { should validate_presence_of :title }
   it { should validate_presence_of :body }
