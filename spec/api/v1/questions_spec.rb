@@ -65,10 +65,6 @@ describe 'Profiles API', type: :request do
         let(:files) { fileable.files }
         let(:received_fileable) { received_question }
       end
-
-      it_behaves_like 'API Not Foundable' do
-        let(:invalid_path) { "/api/v1/questions/#{question.id + 1}" }
-      end
     end
   end
 
@@ -155,7 +151,7 @@ describe 'Profiles API', type: :request do
     let(:api_method) { :delete }
     let(:api_path) { "/api/v1/questions/#{old_question.id}" }
     let(:access_token) { create :access_token }
-    let(:old_question) { create :question, author_id: access_token.resource_owner_id }
+    let!(:old_question) { create :question, author_id: access_token.resource_owner_id }
 
     it_behaves_like 'API Authorizable'
 
@@ -170,9 +166,8 @@ describe 'Profiles API', type: :request do
 
     context 'authorized' do
       it 'actually deletes a question' do
-        delete api_path, params: { access_token: access_token.token }, headers: headers
-        get api_path, params: { access_token: access_token.token }, headers: headers
-        expect(response.status).to eq 404
+        expect { delete api_path, params: { access_token: access_token.token }, headers: headers }
+          .to change(Question, :count).by(-1)
       end
     end
   end

@@ -68,10 +68,6 @@ describe 'Answers API', type: :request do
         let(:files) { fileable.files }
         let(:received_fileable) { json['answer'] }
       end
-
-      it_behaves_like 'API Not Foundable' do
-        let(:invalid_path) { "/api/v1/answers/#{answer.id + 1}" }
-      end
     end
   end
 
@@ -158,7 +154,7 @@ describe 'Answers API', type: :request do
     let(:api_method) { :delete }
     let(:api_path) { "/api/v1/answers/#{old_answer.id}" }
     let(:access_token) { create :access_token }
-    let(:old_answer) { create :answer, author_id: access_token.resource_owner_id }
+    let!(:old_answer) { create :answer, author_id: access_token.resource_owner_id }
 
     it_behaves_like 'API Authorizable'
 
@@ -173,9 +169,8 @@ describe 'Answers API', type: :request do
 
     context 'authorized' do
       it 'actually deletes a answer' do
-        delete api_path, params: { access_token: access_token.token }, headers: headers
-        get api_path, params: { access_token: access_token.token }, headers: headers
-        expect(response.status).to eq 404
+        expect { delete api_path, params: { access_token: access_token.token }, headers: headers }
+          .to change(Answer, :count).by(-1)
       end
     end
   end
