@@ -13,6 +13,8 @@ class Question < ApplicationRecord
   validates :title, :body, presence: true
   validate :validate_best_answer_in_answers
 
+  accepts_nested_attributes_for :reward, reject_if: :all_blank
+
   private
 
   def validate_best_answer_in_answers
