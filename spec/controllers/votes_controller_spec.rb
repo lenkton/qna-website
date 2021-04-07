@@ -15,13 +15,8 @@ RSpec.describe VotesController, type: :controller do
       it_behaves_like 'Controller Createable', :vote do
         let(:format) { :json }
         let(:additional_params) { { id_field_name_sym => votable, votable: votable_plural_sym } }
-      end
-
-      context 'valid params' do
-        it 'renders the created vote object as a JSON' do
-          post :create, params: { vote: { value: 1 }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json
-          expect(response.body).to eq({ votable_type => { vote: { status: :created, value: 1, id: Vote.last.id } } }.to_json)
-        end
+        let(:success_response) { satisfy { response.body == { votable_type => { vote: { status: :created, value: 1, id: Vote.last.id } } }.to_json } }
+        let(:failure_response) { be_unprocessable }
       end
 
       context 'two same actions in a row' do
@@ -47,13 +42,6 @@ RSpec.describe VotesController, type: :controller do
         it 'responces with an error' do
           post :create, params: { vote: { value: 1 }, id_field_name_sym => own_votable, votable: votable_plural_sym }, format: :json
           expect(response).to be_forbidden
-        end
-      end
-
-      context 'invalid params' do
-        it 'responces with an error' do
-          post :create, params: { vote: { value: nil }, id_field_name_sym => votable }, format: :json
-          expect(response).to be_unprocessable
         end
       end
     end

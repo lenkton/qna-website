@@ -13,27 +13,14 @@ RSpec.describe CommentsController, type: :controller do
 
       before { log_in user }
 
-      it_behaves_like 'Controller Createable', :comment
+      it_behaves_like 'Controller Createable', :comment do
+        let(:success_response) { satisfy { response.body == Comment.last.to_json(root: 'comment') } }
+        let(:failure_response) { be_unprocessable }
+      end
 
       it_behaves_like 'Controller Broadcastable', :comment do
         let(:channel_name) { CommentsChannel.broadcasting_for(commentable) }
         let(:expected_response) { Comment.last.as_json(root: 'comment') }
-      end
-
-      context 'valid parameters' do
-        it 'renders a special JSON' do
-          post :create, params: { comment: attributes_for(:comment), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json
-
-          expect(response.body).to eq({ comment: Comment.last }.to_json)
-        end
-      end
-
-      context 'invalid parameters' do
-        it 'responds with an error' do
-          post :create, params: { comment: attributes_for(:comment, :invalid), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json
-
-          expect(response).to be_unprocessable
-        end
       end
     end
   end

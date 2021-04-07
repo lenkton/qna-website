@@ -7,28 +7,14 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'POST #create' do
     before { log_in(author) }
 
-    it_behaves_like 'Controller Createable', :question
+    it_behaves_like 'Controller Createable', :question do
+      let(:success_response) { redirect_to(Question.last) }
+      let(:failure_response) { render_template(:new) }
+    end
+
     it_behaves_like 'Controller Broadcastable', :question do
       let(:channel_name) { 'questions_channel' }
       let(:expected_response) { Question.last.as_json }
-    end
-
-    context 'valid parameters' do
-      let(:question_attributes) { attributes_for(:question) }
-
-      it 'redirects to the question' do
-        post :create, params: { question: question_attributes }
-
-        expect(response).to redirect_to(Question.find_by(title: question_attributes[:title]))
-      end
-    end
-
-    context 'invalid parameters' do
-      it 'renders the new veiw' do
-        post :create, params: { question: attributes_for(:question, :invalid) }
-
-        expect(response).to render_template(:new)
-      end
     end
   end
 
