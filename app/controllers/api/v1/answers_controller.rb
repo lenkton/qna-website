@@ -13,12 +13,13 @@ class Api::V1::AnswersController < Api::V1::BaseController
   end
 
   def create
-    answer.author_id = doorkeeper_token.resource_owner_id
+    answer.author = current_resource_owner
+    answer.question = question
 
-    if question.answers << answer
+    if answer.save
       render json: answer, serializer: AnswerFullSerializer
     else
-      head :unprocessable_entity
+      render json: answer.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -26,7 +27,7 @@ class Api::V1::AnswersController < Api::V1::BaseController
     if answer.update(answer_params)
       render json: answer, serializer: AnswerFullSerializer
     else
-      head :unprocessable_entity
+      render json: answer.errors.full_messages, status: :unprocessable_entity
     end
   end
 

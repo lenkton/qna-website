@@ -12,10 +12,12 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   end
 
   def create
-    if current_user.questions << question
+    question.author = current_resource_owner
+
+    if question.save
       render json: question, serializer: QuestionFullSerializer
     else
-      head :unprocessable_entity
+      render json: question.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -23,7 +25,7 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     if question.update(question_params)
       render json: question, serializer: QuestionFullSerializer
     else
-      head :unprocessable_entity
+      render json: question.errors.full_messages, status: :unprocessable_entity
     end
   end
 
