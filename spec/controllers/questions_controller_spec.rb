@@ -8,6 +8,10 @@ RSpec.describe QuestionsController, type: :controller do
     before { log_in(author) }
 
     it_behaves_like 'Controller Createable', :question
+    it_behaves_like 'Controller Broadcastable', :question do
+      let(:channel_name) { 'questions_channel' }
+      let(:expected_response) { Question.last.as_json }
+    end
 
     context 'valid parameters' do
       let(:question_attributes) { attributes_for(:question) }
@@ -17,11 +21,6 @@ RSpec.describe QuestionsController, type: :controller do
 
         expect(response).to redirect_to(Question.find_by(title: question_attributes[:title]))
       end
-
-      it 'broadcasts the question to the questions_channel' do
-        expect { post :create, params: { question: attributes_for(:question) } }
-          .to(have_broadcasted_to('questions_channel').with { |data| expect(data.to_json).to eq Question.last.to_json })
-      end
     end
 
     context 'invalid parameters' do
@@ -29,11 +28,6 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, params: { question: attributes_for(:question, :invalid) }
 
         expect(response).to render_template(:new)
-      end
-
-      it 'broadcasts no question to the questions_channel' do
-        expect { post :create, params: { question: attributes_for(:question, :invalid) } }
-          .not_to have_broadcasted_to('questions_channel')
       end
     end
   end

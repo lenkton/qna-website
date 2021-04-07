@@ -7,12 +7,16 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'POST #create' do
     let!(:question) { create(:question) }
+    let(:format) { :js }
+    let(:additional_params) { { question_id: question } }
 
     before { log_in(author) }
 
-    it_behaves_like 'Controller Createable', :answer do
-      let(:format) { :js }
-      let(:additional_params) { { question_id: question } }
+    it_behaves_like 'Controller Createable', :answer
+
+    it_behaves_like 'Controller Broadcastable', :answer do
+      let(:channel_name) { AnswersChannel.broadcasting_for(question) }
+      let(:expected_response) { { answer: Answer.last, links: [], files: [], rating: 0 }.as_json }
     end
 
     context 'valid parameters' do
@@ -20,20 +24,6 @@ RSpec.describe AnswersController, type: :controller do
         post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js
 
         expect(response).to render_template(:create)
-      end
-
-      it 'broadcasts the answer to the answers channel' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js }
-          .to(
-            have_broadcasted_to(AnswersChannel.broadcasting_for(question))
-              .with do |data|
-                expect(data.to_json)
-                .to eq(
-                  { answer: Answer.last, links: [], files: [], rating: 0 }
-                  .to_json
-                )
-              end
-          )
       end
     end
 
@@ -106,15 +96,6 @@ RSpec.describe AnswersController, type: :controller do
         it 'renders the update template' do
           expect(response).to render_template(:update)
         end
-      end
-    end
-
-    context 'Random user' do
-      it 'responds with the `unauthorized` error' do
-        log_in(random_user)
-        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
-
-        expect(response).to be_unauthorized
       end
     end
   end

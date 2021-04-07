@@ -8,11 +8,16 @@ RSpec.describe CommentsController, type: :controller do
 
   describe 'POST #create' do
     describe 'Authenticated user' do
+      let(:format) { :json }
+      let(:additional_params) { { commentable_id_sym => commentable.id, commentable: commentable_type } }
+
       before { log_in user }
 
-      it_behaves_like 'Controller Createable', :comment do
-        let(:format) { :json }
-        let(:additional_params) { { commentable_id_sym => commentable.id, commentable: commentable_type } }
+      it_behaves_like 'Controller Createable', :comment
+
+      it_behaves_like 'Controller Broadcastable', :comment do
+        let(:channel_name) { CommentsChannel.broadcasting_for(commentable) }
+        let(:expected_response) { Comment.last.as_json(root: 'comment') }
       end
 
       context 'valid parameters' do
@@ -21,14 +26,6 @@ RSpec.describe CommentsController, type: :controller do
 
           expect(response.body).to eq({ comment: Comment.last }.to_json)
         end
-
-        it 'broadcasts the comment to the comments channel' do
-          expect { post :create, params: { comment: attributes_for(:comment), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json }
-            .to(
-              have_broadcasted_to(CommentsChannel.broadcasting_for(commentable))
-                .with { |data| expect(data.to_json).to eq({ comment: Comment.last }.to_json) }
-            )
-        end
       end
 
       context 'invalid parameters' do
@@ -36,11 +33,6 @@ RSpec.describe CommentsController, type: :controller do
           post :create, params: { comment: attributes_for(:comment, :invalid), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json
 
           expect(response).to be_unprocessable
-        end
-
-        it 'broadcasts no comment to the comments channel' do
-          expect { post :create, params: { comment: attributes_for(:comment, :invalid), commentable_id_sym => commentable.id, commentable: commentable_type }, format: :json }
-            .not_to have_broadcasted_to(CommentsChannel.broadcasting_for(commentable))
         end
       end
     end
