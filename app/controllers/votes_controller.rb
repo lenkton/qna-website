@@ -13,9 +13,10 @@ class VotesController < ApplicationController
     respond_to do |format|
       if current_user.author_of?(votable)
         format.json { head :forbidden }
-      else
-        vote.save
+      elsif vote.save
         format.json { render json: { votable_sym => { vote: { status: :created, value: vote.value, id: vote.id } } } }
+      else
+        format.json { head :unprocessable_entity }
       end
     rescue
       format.json { head :unprocessable_entity }

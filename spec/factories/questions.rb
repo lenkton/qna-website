@@ -17,6 +17,11 @@ FactoryBot.define do
       title { nil }
     end
 
+    trait :old do
+      title { 'old title' }
+      body { 'old body' }
+    end
+
     factory :question_with_files do
       after(:create) do |question, evaluator|
         question.files.attach(io: File.open('Gemfile'), filename: 'Gemfile')

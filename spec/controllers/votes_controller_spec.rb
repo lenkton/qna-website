@@ -12,15 +12,11 @@ RSpec.describe VotesController, type: :controller do
 
       before { log_in author }
 
-      context 'valid params' do
-        it 'creates a vote in the database' do
-          expect { post :create, params: { vote: { value: 1 }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json }.to change(votable.votes, :count).by(1)
-        end
-
-        it 'renders the created vote object as a JSON' do
-          post :create, params: { vote: { value: 1 }, id_field_name_sym => votable, votable: votable_plural_sym }, format: :json
-          expect(response.body).to eq({ votable_type => { vote: { status: :created, value: 1, id: Vote.last.id } } }.to_json)
-        end
+      it_behaves_like 'Controller Createable', :vote do
+        let(:format) { :json }
+        let(:additional_params) { { id_field_name_sym => votable, votable: votable_plural_sym } }
+        let(:success_response) { satisfy { response.body == { votable_type => { vote: { status: :created, value: 1, id: Vote.last.id } } }.to_json } }
+        let(:failure_response) { be_unprocessable }
       end
 
       context 'two same actions in a row' do
@@ -48,17 +44,6 @@ RSpec.describe VotesController, type: :controller do
           expect(response).to be_forbidden
         end
       end
-
-      context 'invalid params' do
-        it 'does not create a vote' do
-          expect { post :create, params: { vote: { value: nil }, id_field_name_sym => votable }, format: :json }.not_to change(Vote, :count)
-        end
-
-        it 'responces with an error' do
-          post :create, params: { vote: { value: nil }, id_field_name_sym => votable }, format: :json
-          expect(response).to be_unprocessable
-        end
-      end
     end
   end
 
@@ -68,13 +53,9 @@ RSpec.describe VotesController, type: :controller do
     context 'The author' do
       before { log_in author }
 
-      it 'destroys the vote' do
-        expect { delete :destroy, params: { id: vote, votable: votable_plural_sym }, format: :json }.to change(votable.votes, :count).by(-1)
-      end
-
-      it 'renders a special json response' do
-        delete :destroy, params: { id: vote, votable: votable_plural_sym }, format: :json
-        expect(response.body).to eq({ votable_type => { vote: { status: :deleted, previous_value: vote.value } } }.to_json)
+      it_behaves_like 'Controller Deleteable', :vote do
+        let(:success_response) { satisfy { response.body == { votable_type => { vote: { status: :deleted, previous_value: vote.value } } }.to_json } }
+        let(:format) { :json }
       end
     end
   end

@@ -7,40 +7,14 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'POST #create' do
     before { log_in(author) }
 
-    context 'valid parameters' do
-      it 'creates a question in the database' do
-        expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
-      end
-
-      let(:question_attributes) { attributes_for(:question) }
-
-      it 'redirects to the question' do
-        post :create, params: { question: question_attributes }
-
-        expect(response).to redirect_to(Question.find_by(title: question_attributes[:title]))
-      end
-
-      it 'broadcasts the question to the questions_channel' do
-        expect { post :create, params: { question: attributes_for(:question) } }
-          .to(have_broadcasted_to('questions_channel').with { |data| expect(data.to_json).to eq Question.last.to_json })
-      end
+    it_behaves_like 'Controller Createable', :question do
+      let(:success_response) { redirect_to(Question.last) }
+      let(:failure_response) { render_template(:new) }
     end
 
-    context 'invalid parameters' do
-      it 'does not create a question in the database' do
-        expect { post :create, params: { question: attributes_for(:question, :invalid) } }.to_not change(Question, :count)
-      end
-
-      it 'renders the new veiw' do
-        post :create, params: { question: attributes_for(:question, :invalid) }
-
-        expect(response).to render_template(:new)
-      end
-
-      it 'broadcasts no question to the questions_channel' do
-        expect { post :create, params: { question: attributes_for(:question, :invalid) } }
-          .not_to have_broadcasted_to('questions_channel')
-      end
+    it_behaves_like 'Controller Broadcastable', :question do
+      let(:channel_name) { 'questions_channel' }
+      let(:expected_response) { Question.last.as_json }
     end
   end
 
@@ -50,14 +24,8 @@ RSpec.describe QuestionsController, type: :controller do
     context 'Author' do
       before { log_in(author) }
 
-      it 'destroys the question' do
-        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
-      end
-
-      it 'redirects to the questions page' do
-        delete :destroy, params: { id: question }
-
-        expect(response).to redirect_to questions_path
+      it_behaves_like 'Controller Deleteable', :question do
+        let(:success_response) { redirect_to questions_path }
       end
     end
 
@@ -73,48 +41,22 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:old_values) { { title: 'old title', body: 'old body' } }
-    let(:new_values) { { title: 'new title', body: 'new body' } }
-    let!(:question) { create(:question, author: author, title: old_values[:title], body: old_values[:body]) }
-
     context 'Author' do
       before { log_in(author) }
 
-      context 'with valid parameters' do
-        before { patch :update, params: { id: question, question: new_values }, format: :js }
-
-        it 'updates the question' do
-          question.reload
-
-          expect(question.body).to eq new_values[:body]
-          expect(question.title).to eq new_values[:title]
-        end
-
-        it 'renders the update template' do
-          expect(response).to render_template(:update)
-        end
-      end
-
-      context 'with invalid parameters' do
-        before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js }
-
-        it 'does not change the question' do
-          question.reload
-
-          expect(question.body).to eq old_values[:body]
-          expect(question.title).to eq old_values[:title]
-        end
-
-        it 'renders the update template' do
-          expect(response).to render_template(:update)
-        end
+      it_behaves_like 'Controller Updateable', :question do
+        let(:format) { :js }
+        let(:success_response) { render_template(:update) }
+        let(:failure_response) { render_template(:update) }
       end
     end
 
     context 'Random user' do
+      let!(:question) { create(:question, author: author) }
+
       it 'renders the update template' do
         log_in(random_user)
-        patch :update, params: { id: question, question: new_values }, format: :js
+        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
 
         expect(response).to render_template(:update)
       end
