@@ -18,6 +18,8 @@ module Qna
 
     config.time_zone = "Moscow"
     config.i18n.default_locale = :ru
+    config.active_job.queue_adapter = :sidekiq
+    default_url_options[:host] = '127.0.0.1:3000'
 
     config.generators do |g|
       g.test_framework :rspec,
