@@ -9,6 +9,10 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  after_create do
+    NotificationJob.perform_later(self)
+  end
+
   def choose_best!
     transaction do
       question.update!(best_answer_id: id)

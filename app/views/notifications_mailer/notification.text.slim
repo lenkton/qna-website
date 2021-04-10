@@ -1,0 +1,10 @@
+' #{t('.new_answer_notification')}
+= "\r\n" * 2
+= t('.greetings')
+= "\r\n" * 2
+= t('.question')
+':
+= link_to @answer.question.title, @answer.question
+|
+
+' #{t('.answer')}: #{dd = @answer.body}

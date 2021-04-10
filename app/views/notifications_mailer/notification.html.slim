@@ -1,0 +1,8 @@
+h1 = t('.new_answer_notification')
+p = t('.greetings')
+dl
+  dt = t('.question')
+  dd = link_to @answer.question.title, @answer.question
+
+  dt = t('.answer')
+  dd = @answer.body
