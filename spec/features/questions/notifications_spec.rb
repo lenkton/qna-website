@@ -10,12 +10,29 @@ feature 'User receives new answer notifications', %q(
   given(:random_user) { create :user }
   given(:subscriber) { create :user }
 
-  scenario 'author receives new answer notification', js: true do
-    leave_an_answer author: random_user, body: 'new answer', question: question
+  describe 'author', js: true do
+    scenario 'receives new answer notification' do
+      leave_an_answer author: random_user, body: 'new answer', question: question
 
-    open_email author.email
-    expect(current_email).to have_content('new answer')
-    expect(current_email).to have_link(question.title)
+      open_email author.email
+      expect(current_email).to have_content('new answer')
+      expect(current_email).to have_link(question.title)
+    end
+
+    scenario 'can unsubscribe from the question' do
+      Capybara.using_session('author') do
+        log_in author
+        visit question_path(question)
+        click_on 'Отписаться'
+      end
+
+      Capybara.using_session('answer author') do
+        leave_an_answer author: random_user, body: 'new answer', question: question
+      end
+
+      open_email author.email
+      expect(current_email).to be_nil
+    end
   end
 
   scenario 'subscribed user receives new answer notification', js: true do
