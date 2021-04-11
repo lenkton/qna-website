@@ -1,5 +1,7 @@
 class NotificationService
-  def notify_author(answer)
-    NotificationsMailer.notification(answer).deliver_later
+  def send_notifications(answer)
+    answer.question.subscribers.each do |user|
+      NotificationsMailer.notification(answer, user).deliver_later
+    end
   end
 end

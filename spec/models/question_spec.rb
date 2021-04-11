@@ -9,6 +9,8 @@ RSpec.describe Question, type: :model do
   it_behaves_like 'rewardable'
 
   it { should have_many(:answers).dependent(:destroy) }
+  it { should have_many(:subscribings).dependent(:destroy) }
+  it { should have_many(:subscribers).through(:subscribings) }
   it { should belong_to(:best_answer).optional }
 
   it { should validate_presence_of :title }

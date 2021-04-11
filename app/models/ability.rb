@@ -31,6 +31,7 @@ class Ability
     user_vote_abilities
 
     can :create, Comment
+    can :create, Subscribing
 
     can :destroy, ActiveStorage::Attachment, record: { author_id: @user.id }
     can :destroy, Link, linkable: { author_id: @user.id }

@@ -17,7 +17,10 @@ module Qna
     # in config/environments, which are processed later.
 
     config.time_zone = "Moscow"
+
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
     config.i18n.default_locale = :ru
+
     config.active_job.queue_adapter = :sidekiq
     default_url_options[:host] = '127.0.0.1:3000'
 

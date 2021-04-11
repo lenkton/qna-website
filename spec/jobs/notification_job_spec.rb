@@ -9,7 +9,7 @@ RSpec.describe NotificationJob, type: :job do
   end
 
   it 'calls NotificationJob#send_notifications' do
-    expect(service).to receive(:notify_author).with(answer)
+    expect(service).to receive(:send_notifications).with(answer)
     NotificationJob.perform_now(answer)
   end
 end

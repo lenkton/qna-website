@@ -58,6 +58,9 @@ RSpec.describe Ability, type: :model do
     it { should be_able_to :destroy, create(:question, author: user) }
     it { should_not be_able_to :destroy, create(:question, author: random_user) }
 
+    # Subscribings
+    it { should be_able_to :create, Subscribing }
+
     # Files
     it { should be_able_to :read, File }
     it { should be_able_to :destroy, create(:question_with_files, author: user).files.first }

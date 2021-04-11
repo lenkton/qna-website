@@ -7,11 +7,17 @@ class Question < ApplicationRecord
   include Rewardable
 
   has_many :answers, dependent: :destroy
+  has_many :subscribings, dependent: :destroy, foreign_key: :subscription_id
+  has_many :subscribers, through: :subscribings
 
   belongs_to :best_answer, class_name: 'Answer', optional: true
 
   validates :title, :body, presence: true
   validate :validate_best_answer_in_answers
+
+  after_create do
+    subscribers.push(author)
+  end
 
   private
 
