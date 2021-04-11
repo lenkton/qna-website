@@ -1,0 +1,35 @@
+ru:
+  questions:
+    create:
+      success: Вопрос был успешно создан!
+    destroy:
+      success: Вопрос был успешно удалён!
+    errors:
+      not_in_answers: не является ответом на этот вопрос
+    form:
+      add_link: Добавить ссылку
+      body: Содержание
+      create_question: Задать вопрос
+      files: Прикреплённые файлы
+      links: Ссылки
+      reward: Награда за лучший ответ
+      title: Заголовок
+    index:
+      create_question: Задать вопрос
+      questions: Вопросы
+    new:
+      question_creation: Создание вопроса
+    set_best_answer:
+      user_rewarded: "%{name} получил награду за лучший ответ!"
+    show:
+      add_answer: Добавить ответ
+      comments: Комментарии
+      delete_question: Удалить вопрос
+      edit_submit: Сохранить
+      edit_question: Редактировать вопрос
+      files: Файлы
+      links: Ссылки
+      new_answer: "Новый ответ:"
+      send_answer: Ответить
+      subscribe: Подписаться
+      unsubscribe: Отписаться

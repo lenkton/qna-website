@@ -60,6 +60,8 @@ RSpec.describe Ability, type: :model do
 
     # Subscribings
     it { should be_able_to :create, Subscribing }
+    it { should be_able_to :destroy, create(:subscribing, subscriber: user) }
+    it { should_not be_able_to :destroy, create(:subscribing, subscriber: random_user) }
 
     # Files
     it { should be_able_to :read, File }

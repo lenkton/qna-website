@@ -3,8 +3,16 @@
 
   = render 'shared/rating', resource: question, id: "question-rating"
 
-  - if can?(:create, Subscribing) && !current_user&.subscribed_to?(question)
-    = button_to t('.subscribe'), question_subscribings_path(question), method: :post, remote: true, form: { id: 'question-subscribe' }
+  #question-subscribe-block class=('subscribed' if subscribing.persisted?)
+    - if can? :create, Subscribing
+      #question-subscribe
+        = button_to t('.subscribe'), question_subscribings_path(question), method: :post, remote: true
+    - if can? :destroy, Subscribing
+      #question-unsubscribe
+        - if subscribing.persisted? && can?(:destroy, subscribing)
+          = link_to t('.unsubscribe'), subscribing_path(subscribing), method: :delete, remote: true, id: 'question-unsubscribe-link'
+        - else
+          = link_to t('.unsubscribe'), '#', method: :delete, remote: true, id: 'question-unsubscribe-link'
 
   - if can? :destroy, question
     = link_to t('.delete_question'), question_path(question), method: :delete, data: { confirm: t('actions.destroy_confirmation') }

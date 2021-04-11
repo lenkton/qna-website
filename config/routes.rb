@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
     resources :votes, only: %i[create destroy], shallow: true, defaults: { votable: :questions }
     resources :comments, only: %i[create], shallow: true, defaults: { commentable: :question }
-    resources :subscribings, only: [:create]
+    resources :subscribings, only: %i[create destroy], shallow: true
 
     post :set_best_answer, on: :member
   end

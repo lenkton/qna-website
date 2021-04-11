@@ -1,0 +1,7 @@
+#question-subscribe-block.subscribed > #question-subscribe {
+  display: none;
+}
+
+#question-subscribe-block:not(.subscribed) > #question-unsubscribe {
+  display: none;
+}

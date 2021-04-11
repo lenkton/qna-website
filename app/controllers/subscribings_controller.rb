@@ -1,5 +1,5 @@
 class SubscribingsController < ApplicationController
-  before_action :authenticate_user!, only: [:create]
+  before_action :authenticate_user!, only: %i[create destroy]
 
   expose! :subscribing
 
@@ -10,5 +10,12 @@ class SubscribingsController < ApplicationController
     subscribing.subscription_id = params[:question_id]
 
     subscribing.save
+    respond_to do |format|
+      format.json { render json: subscribing, root: 'subscribing' }
+    end
+  end
+
+  def destroy
+    subscribing.destroy
   end
 end

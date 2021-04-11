@@ -65,13 +65,52 @@ feature 'User receives new answer notifications', %q(
     expect(current_email).to have_link(another_question.title)
   end
 
-  let(:subscribing) { create :subscribing, subscription: question }
-  let(:subscribed_user) { subscribing.subscriber }
+  scenario 'user subscribes and then immediately unsubscribes', js: true do
+    Capybara.using_session('user') do
+      log_in subscriber
+      visit question_path(question)
+      click_on 'Подписаться'
+      click_on 'Отписаться'
+      expect(page).to have_content('Вы успешно отписались от рассылки')
+      expect(page).to have_button('Подписаться')
+    end
 
-  scenario 'subscribed user do not see a subscribe button' do
-    log_in subscribed_user
-    visit question_path(question)
-    expect(page).not_to have_button('Подписаться')
+    Capybara.using_session('answer author') do
+      leave_an_answer author: random_user, body: 'new answer', question: question
+    end
+
+    open_email subscriber.email
+    expect(current_email).to be_nil
+  end
+
+  describe 'subscribed user', js: true do
+    let(:subscribing) { create :subscribing, subscription: question }
+    let(:subscribed_user) { subscribing.subscriber }
+
+    scenario 'does not see a subscribe button' do
+      log_in subscribed_user
+      visit question_path(question)
+      expect(page).not_to have_button('Подписаться')
+    end
+
+    scenario 'unsubscribes from a question' do
+      Capybara.using_session('subscriber') do
+        log_in subscribed_user
+        visit question_path(question)
+
+        click_on 'Отписаться'
+
+        expect(page).to have_content('Вы успешно отписались от рассылки')
+        expect(page).to have_button('Подписаться')
+      end
+
+      Capybara.using_session('answer author') do
+        leave_an_answer author: random_user, body: 'new answer', question: question
+      end
+
+      open_email subscribed_user.email
+      expect(current_email).to be_nil
+    end
   end
 
   scenario 'a guest cannot subscribe to a question updates' do

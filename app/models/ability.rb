@@ -29,9 +29,9 @@ class Ability
     user_question_abilities
     user_answer_abilities
     user_vote_abilities
+    user_subscribing_abilities
 
     can :create, Comment
-    can :create, Subscribing
 
     can :destroy, ActiveStorage::Attachment, record: { author_id: @user.id }
     can :destroy, Link, linkable: { author_id: @user.id }
@@ -52,5 +52,10 @@ class Ability
   def user_question_abilities
     can :create, Question
     can %i[update destroy set_best_answer], Question, author_id: @user.id
+  end
+
+  def user_subscribing_abilities
+    can :create, Subscribing
+    can :destroy, Subscribing, subscriber_id: @user.id
   end
 end
