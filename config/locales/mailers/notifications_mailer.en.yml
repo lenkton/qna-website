@@ -1,0 +1,7 @@
+en:
+  notifications_mailer:
+    notification:
+      answer: New answer text
+      greetings: Hello! The question of your interest has received a new answer! Hurry up and check it out!
+      new_answer_notification: New answer was created!
+      question: Subscribed question

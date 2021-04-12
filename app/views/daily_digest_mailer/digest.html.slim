@@ -1,0 +1,5 @@
+h1 Daily Digest
+p = t('.greetings')
+ul
+  - @new_questions.each do |question|
+    = link_to  question.title, url_for(question)

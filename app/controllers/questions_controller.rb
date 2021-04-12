@@ -10,6 +10,7 @@ class QuestionsController < ApplicationController
          scope: -> { question.answers },
          id: -> { params[:answer_id] }
   expose :comment, -> { question.comments.new }
+  expose :subscribing, -> { Subscribing.find_by(subscriber_id: current_user&.id, subscription_id: question.id) || Subscribing.new }
 
   authorize_resource :exposed_question, parent: false, class: 'Question'
 

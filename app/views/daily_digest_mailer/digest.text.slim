@@ -1,0 +1,8 @@
+' Daily Digest
+= "\r\n" * 2
+= t('.greetings')
+- @new_questions.each do |question|
+  =<> question.title
+  ' (#{url_for(question)})
+  - if question != @new_questions.last
+    ',

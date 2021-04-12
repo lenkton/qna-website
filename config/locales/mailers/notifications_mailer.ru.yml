@@ -1,0 +1,7 @@
+ru:
+  notifications_mailer:
+    notification:
+      answer: Новый ответ
+      greetings: Здравствуйте! На один из важных для вас вопросов недавно был получен новый ответ!
+      new_answer_notification: Был получен новый ответ
+      question: Вопрос, на который вы подписаны

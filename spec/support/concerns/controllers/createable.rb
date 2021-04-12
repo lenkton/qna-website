@@ -18,17 +18,19 @@ shared_examples_for 'Controller Createable' do |resource|
     end
   end
 
-  context 'invalid parameters' do
-    let(:invalid_attributes) { attributes_for resource, :invalid }
+  if instance_methods.include?(:failure_response)
+    context 'invalid parameters' do
+      let(:invalid_attributes) { attributes_for resource, :invalid }
 
-    it "does not create #{resource} in the database" do
-      expect { post :create, params: { resource => invalid_attributes }.merge(additional_params), format: format }
-        .to_not change(scope, :count)
-    end
+      it "does not create #{resource} in the database" do
+        expect { post :create, params: { resource => invalid_attributes }.merge(additional_params), format: format }
+          .to_not change(scope, :count)
+      end
 
-    it_behaves_like 'Controller Renderable' do
-      let(:params) { { resource => invalid_attributes }.merge(additional_params) }
-      let(:expected_response) { failure_response }
+      it_behaves_like 'Controller Renderable' do
+        let(:params) { { resource => invalid_attributes }.merge(additional_params) }
+        let(:expected_response) { failure_response }
+      end
     end
   end
 end

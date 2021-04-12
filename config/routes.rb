@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   use_doorkeeper
   devise_for :users
@@ -12,6 +14,7 @@ Rails.application.routes.draw do
 
     resources :votes, only: %i[create destroy], shallow: true, defaults: { votable: :questions }
     resources :comments, only: %i[create], shallow: true, defaults: { commentable: :question }
+    resources :subscribings, only: %i[create destroy], shallow: true
 
     post :set_best_answer, on: :member
   end
@@ -33,4 +36,7 @@ Rails.application.routes.draw do
   end
 
   mount ActionCable.server => '/cable'
+  authenticate :user, ->(u) { u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end

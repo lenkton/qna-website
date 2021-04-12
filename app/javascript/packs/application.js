@@ -11,6 +11,7 @@ require("jquery")
 require("@nathanvda/cocoon")
 
 import "questions/showEditForm"
+import "questions/subscription"
 import "votes/votingHandler"
 import "answers/showEditForm"
 import "comments/createHandler"

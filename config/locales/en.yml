@@ -94,36 +94,3 @@ en:
   votes:
     against: Against
     for: For
-  questions:
-    create:
-      success: The question has been successfully created!
-    destroy:
-      success: The question has been successfully deleted!
-    errors:
-      not_in_answers: is not an answer of the question
-    form:
-      add_link: Add link
-      body: Body
-      create_question: Ask the question
-      files: Attached files
-      links: Links
-      reward: Best answer reward
-      title: Title
-    index:
-      create_question: Ask a question
-      questions: Questions
-    new:
-      question_creation: Question creation
-    set_best_answer:
-      user_rewarded: "%{name} was rewarded for the best answer!"
-    show:
-      add_answer: Add an answer
-      comments: Comments
-      delete_question: Delete question
-      edit_submit: Save
-      edit_question: Edit question
-      files: Files
-      links: Links
-      new_answer: "New answer:"
-      send_answer: Send
-
